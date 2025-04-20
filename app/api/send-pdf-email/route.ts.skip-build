@@ -1,0 +1,10 @@
+// This is a placeholder file to skip building this API route during production build
+// The actual implementation is in route.ts
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  return NextResponse.json(
+    { error: 'This is a placeholder API route for build purposes' },
+    { status: 501 }
+  );
+}

@@ -1,0 +1,5 @@
+// This is a placeholder file to skip building this page during production build
+// The actual implementation is in page.tsx
+export default function SkipBuildPage() {
+  return null
+}
