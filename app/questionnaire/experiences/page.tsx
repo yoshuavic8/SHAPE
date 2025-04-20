@@ -8,13 +8,17 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { questionnaireSections } from "@/lib/questionnaire-data"
 import { QuestionnaireProgress } from "@/components/questionnaire-progress"
 import { QuestionnaireRating } from "@/components/questionnaire-rating"
+import { QuestionnaireEssay } from "@/components/questionnaire-essay"
+import { QuestionnaireMultiple } from "@/components/questionnaire-multiple"
+import { QuestionnaireRanking } from "@/components/questionnaire-ranking"
 import { supabase } from "@/lib/supabase/client"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function ExperiencesQuestionnairePage() {
-  const [answers, setAnswers] = useState<Record<string, number>>({})
+  const [answers, setAnswers] = useState<Record<string, any>>({})
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [autoSaveTimer, setAutoSaveTimer] = useState<NodeJS.Timeout | null>(null)
   const router = useRouter()
   const { toast } = useToast()
 
@@ -40,22 +44,57 @@ export default function ExperiencesQuestionnairePage() {
         .single()
 
       if (data?.experiences) {
-        // Convert any numeric keys to string keys if needed
-        const convertedAnswers: Record<string, number> = {}
+        // Convert any keys to string keys if needed
+        const convertedAnswers: Record<string, any> = {}
         Object.entries(data.experiences).forEach(([key, value]) => {
-          convertedAnswers[key] = value as number
+          convertedAnswers[key] = value
         })
         setAnswers(convertedAnswers)
       }
     }
 
     loadAnswers()
+
+    // Setup auto-save timer
+    const timer = setInterval(autoSaveAnswers, 10000) // Auto-save every 10 seconds
+    setAutoSaveTimer(timer)
+
+    // Cleanup timer on unmount
+    return () => {
+      if (autoSaveTimer) {
+        clearInterval(autoSaveTimer)
+      }
+    }
   }, [router])
+
+  // Auto-save function
+  const autoSaveAnswers = async () => {
+    if (Object.keys(answers).length === 0) return
+
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      if (!session) return
+
+      await supabase
+        .from("questionnaire_results")
+        .update({
+          experiences: answers,
+        })
+        .eq("user_id", session.user.id)
+
+      console.log("Auto-saved answers at", new Date().toLocaleTimeString())
+    } catch (error) {
+      console.error("Auto-save failed:", error)
+    }
+  }
 
   const currentQuestion = questions[currentQuestionIndex]
   const isLastQuestion = currentQuestionIndex === questions.length - 1
 
-  const handleRatingChange = (value: number) => {
+  const handleAnswerChange = (value: any) => {
     setAnswers((prev) => ({
       ...prev,
       [currentQuestion.id]: value,
@@ -90,32 +129,13 @@ export default function ExperiencesQuestionnairePage() {
         return
       }
 
-      // Process answers into categories
-      const categorizedAnswers: Record<string, number[]> = {}
-
-      // Group answers by category
-      questions.forEach((question) => {
-        const score = answers[question.id] || 0
-        if (!categorizedAnswers[question.category]) {
-          categorizedAnswers[question.category] = []
-        }
-        categorizedAnswers[question.category].push(score)
-      })
-
-      // Calculate average score for each category
-      const processedAnswers: Record<string, number> = {}
-      Object.entries(categorizedAnswers).forEach(([category, scores]) => {
-        const sum = scores.reduce((a, b) => a + b, 0)
-        const avg = sum / scores.length
-        processedAnswers[category] = parseFloat(avg.toFixed(2))
-      })
-
-      // Save to database and mark as completed
+      // Save raw answers to database
+      // This preserves all answer types (text, multiple choice, etc.)
       const { error } = await supabase
         .from("questionnaire_results")
         .update({
-          experiences: processedAnswers,
-          is_completed: true,
+          experiences: answers,
+          is_completed: true, // Mark the entire questionnaire as completed
         })
         .eq("user_id", session.user.id)
 
@@ -163,17 +183,47 @@ export default function ExperiencesQuestionnairePage() {
               <h3 className="text-lg font-medium mb-4">
                 {currentQuestionIndex + 1}. {currentQuestion.text}
               </h3>
-              <QuestionnaireRating
-                questionId={currentQuestion.id}
-                value={answers[currentQuestion.id] || 0}
-                onChange={handleRatingChange}
-              />
+
+              {currentQuestion.type === "scale" && (
+                <QuestionnaireRating
+                  questionId={currentQuestion.id}
+                  value={answers[currentQuestion.id] || 0}
+                  onChange={handleAnswerChange}
+                />
+              )}
+
+              {currentQuestion.type === "open" && (
+                <QuestionnaireEssay
+                  questionId={currentQuestion.id}
+                  value={answers[currentQuestion.id] || ""}
+                  onChange={handleAnswerChange}
+                />
+              )}
+
+              {currentQuestion.type === "multiple" && currentQuestion.options && (
+                <QuestionnaireMultiple
+                  questionId={currentQuestion.id}
+                  options={currentQuestion.options}
+                  value={answers[currentQuestion.id] || (currentQuestion.text.includes("Urutkan") ? [] : "")}
+                  onChange={handleAnswerChange}
+                  multiSelect={currentQuestion.text.includes("Pilih") && !currentQuestion.text.includes("Urutkan")}
+                />
+              )}
+
+              {currentQuestion.type === "multiple" && currentQuestion.options && currentQuestion.text.includes("Urutkan") && (
+                <QuestionnaireRanking
+                  questionId={currentQuestion.id}
+                  options={currentQuestion.options}
+                  value={answers[currentQuestion.id] || []}
+                  onChange={handleAnswerChange}
+                />
+              )}
             </div>
           )}
           {!isAnswered && (
             <Alert variant="destructive">
               <AlertTitle>Required</AlertTitle>
-              <AlertDescription>Please select a rating before proceeding.</AlertDescription>
+              <AlertDescription>Please answer the question before proceeding.</AlertDescription>
             </Alert>
           )}
         </CardContent>

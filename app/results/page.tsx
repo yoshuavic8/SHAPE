@@ -6,7 +6,7 @@ import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import { ShapeResultsTabs } from "@/components/shape-results-tabs"
 import { ResultsPDFEnhanced } from "@/components/results-pdf-enhanced"
-import { analyzeResults, generateShapeCode } from "@/lib/results-analyzer"
+import { analyzeSpiritualGifts, analyzeHeartDesire, analyzePersonality, analyzeExperiences, generateShapeProfile } from "@/lib/results-analyzer"
 
 export default async function ResultsPage() {
   const cookieStore = await cookies();
@@ -59,7 +59,7 @@ export default async function ResultsPage() {
   if (!results) {
     // No results found at all - show empty state
     return (
-      <div className="flex flex-col items-center justify-center space-y-6 py-12">
+      <div className="flex flex-col items-center justify-center space-y-6 py-12 px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-3">
           <h2 className="text-3xl font-bold tracking-tight">Belum Ada Hasil</h2>
           <p className="text-muted-foreground max-w-md">
@@ -116,7 +116,7 @@ export default async function ResultsPage() {
     const progress = Math.round((completedSections.length / sections.length) * 100)
 
     return (
-      <div className="flex flex-col items-center justify-center space-y-6 py-12">
+      <div className="flex flex-col items-center justify-center space-y-6 py-12 px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-3">
           <h2 className="text-3xl font-bold tracking-tight">Kuesioner Belum Selesai</h2>
           <p className="text-muted-foreground max-w-md">
@@ -152,17 +152,20 @@ export default async function ResultsPage() {
   // User profile and userName already fetched above
 
   // Analyze results
-  const spiritualGifts = analyzeResults(results.spiritual_gifts)
-  const heartDesire = analyzeResults(results.heart_desire)
-  const personality = analyzeResults(results.personality)
-  const experiences = analyzeResults(results.experiences)
+  const spiritualGifts = analyzeSpiritualGifts(results.spiritual_gifts)
+  const heartDesire = analyzeHeartDesire(results.heart_desire)
+  const personality = analyzePersonality(results.personality)
+  const experiences = analyzeExperiences(results.experiences)
 
-  // Generate SHAPE code
-  const shapeCode = generateShapeCode(spiritualGifts, heartDesire, personality, experiences)
+  // Generate SHAPE profile
+  const shapeProfile = generateShapeProfile(spiritualGifts, heartDesire, personality, experiences)
+
+  // Get SHAPE code
+  const shapeCode = shapeProfile.shapeCode
 
   // Generate recommendations
   const recommendations = {
-    purposeStatement: `Berdasarkan profil SHAPE-E Anda, Anda dirancang secara unik untuk melayani dengan ${spiritualGifts[0]?.category || "karunia"} Anda, didorong oleh hasrat untuk ${heartDesire[0]?.category || "melayani"}, dengan kepribadian ${personality[0]?.category || "yang unik"} dan pengalaman hidup yang berharga.`,
+    purposeStatement: `Berdasarkan profil SHAPE-E Anda, Anda dirancang secara unik untuk melayani dengan ${shapeProfile.spiritualGifts[0]?.category || "karunia"} Anda, didorong oleh hasrat untuk ${shapeProfile.heartDesire[0]?.category || "melayani"}, dengan kepribadian ${shapeProfile.personality.type || "yang unik"} dan pengalaman hidup yang berharga.`,
     ministryAreas: [
       "Pelayanan Pemuridan",
       "Pelayanan Pengajaran",
@@ -177,12 +180,18 @@ export default async function ResultsPage() {
       "Pengembangan Keterampilan Komunikasi",
     ],
     bibleVerse: "Sebab kita ini buatan Allah, diciptakan dalam Kristus Yesus untuk melakukan pekerjaan baik, yang dipersiapkan Allah sebelumnya. Ia mau, supaya kita hidup di dalamnya. - Efesus 2:10",
-    personalizedAdvice: `Dengan kombinasi karunia ${spiritualGifts[0]?.category || "spiritual"} dan hasrat untuk ${heartDesire[0]?.category || "melayani"}, Anda memiliki potensi besar untuk membuat dampak dalam pelayanan. Teruslah mengembangkan keterampilan Anda dan carilah kesempatan untuk menggunakan karunia Anda.`,
+    personalizedAdvice: [
+      `Dengan kombinasi karunia ${shapeProfile.spiritualGifts[0]?.category || "spiritual"} dan hasrat untuk ${shapeProfile.heartDesire[0]?.category || "melayani"}, Anda memiliki potensi besar untuk membuat dampak dalam pelayanan.`,
+      `Teruslah mengembangkan keterampilan Anda dan carilah kesempatan untuk menggunakan karunia Anda dalam pelayanan.`,
+      `Pertimbangkan untuk bergabung dengan pelayanan yang sesuai dengan profil SHAPE-E Anda untuk memaksimalkan dampak Anda.`
+    ],
     strengthsWeaknesses: {
       strengths: [
-        `Karunia utama dalam ${spiritualGifts[0]?.category || "pelayanan"} yang dapat digunakan untuk membangun tubuh Kristus`,
-        `Hasrat yang kuat untuk ${heartDesire[0]?.category || "melayani"}`,
-        `Kepribadian ${personality[0]?.category || "yang unik"} yang membawa perspektif berharga`,
+        `Karunia utama dalam ${shapeProfile.spiritualGifts[0]?.category || "pelayanan"} yang dapat digunakan untuk membangun tubuh Kristus`,
+        `Hasrat yang kuat untuk ${shapeProfile.heartDesire[0]?.category || "melayani"}`,
+        `Kepribadian ${shapeProfile.personality.type || "yang unik"} yang membawa perspektif berharga`,
+        `Kemampuan dalam ${shapeProfile.abilities[0]?.category || "melayani"} yang dapat digunakan untuk melayani`,
+        `Pengalaman berharga dalam ${shapeProfile.experiences[0]?.category || "kehidupan"} yang membentuk Anda`,
       ],
       weaknesses: [
         "Mungkin perlu mengembangkan keterampilan komunikasi",
@@ -190,6 +199,35 @@ export default async function ResultsPage() {
         "Bisa terlalu fokus pada satu area pelayanan",
       ],
     },
+    // Tambahkan properti yang diperlukan untuk ShapeRecommendations
+    ministryRecommendations: [
+      `Pelayanan yang memanfaatkan karunia ${shapeProfile.spiritualGifts[0]?.category || "spiritual"}`,
+      `Pelayanan yang sesuai dengan kepribadian ${shapeProfile.personality.type || "Anda"}`,
+      `Pelayanan yang memungkinkan Anda menggunakan kemampuan ${shapeProfile.abilities[0]?.category || "Anda"}`
+    ],
+    careerRecommendations: [
+      `Karir yang memanfaatkan karunia ${shapeProfile.spiritualGifts[0]?.category || "spiritual"}`,
+      `Karir yang sesuai dengan kepribadian ${shapeProfile.personality.type || "Anda"}`,
+      `Karir yang memungkinkan Anda menggunakan kemampuan ${shapeProfile.abilities[0]?.category || "Anda"}`
+    ],
+    developmentRecommendations: [
+      "Mengembangkan keterampilan komunikasi",
+      "Memperdalam pemahaman Alkitab",
+      "Mengasah kemampuan kepemimpinan"
+    ],
+    shapeSynergy: [
+      `Karunia ${shapeProfile.spiritualGifts[0]?.category || "spiritual"} Anda melengkapi hasrat ${shapeProfile.heartDesire[0]?.category || "hati"} Anda`,
+      `Kepribadian ${shapeProfile.personality.type || "Anda"} mendukung kemampuan ${shapeProfile.abilities[0]?.category || "Anda"}`,
+      `Pengalaman hidup Anda telah mempersiapkan Anda untuk pelayanan yang efektif`
+    ],
+    communityRoles: [
+      "Mentor",
+      "Pemimpin Kelompok Kecil",
+      "Pengajar",
+      "Konselor",
+      "Pelayan Masyarakat"
+    ],
+    shapeProfile: shapeProfile
   }
 
   // Format completion date
@@ -200,7 +238,7 @@ export default async function ResultsPage() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 sm:px-6 lg:px-8">
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Hasil SHAPE-E Anda</h2>
@@ -208,16 +246,24 @@ export default async function ResultsPage() {
             Selesai pada {completedDate}
           </p>
         </div>
-        <ResultsPDFEnhanced
-          userName={userName}
-          spiritualGifts={spiritualGifts}
-          heartDesire={heartDesire}
-          personality={personality}
-          experiences={experiences}
-          shapeCode={shapeCode}
-          recommendations={recommendations}
-          completedDate={completedDate}
-        />
+        <div className="flex space-x-2">
+          <Button variant="outline" asChild>
+            <a href="/dashboard">
+              <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-4 w-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+              Back to Dashboard
+            </a>
+          </Button>
+          <ResultsPDFEnhanced
+            userName={userName}
+            spiritualGifts={spiritualGifts}
+            heartDesire={heartDesire}
+            personality={personality}
+            experiences={experiences}
+            shapeCode={shapeCode}
+            recommendations={recommendations}
+            completedDate={completedDate}
+          />
+        </div>
       </div>
 
       <Card>
@@ -227,10 +273,14 @@ export default async function ResultsPage() {
             Kode unik yang merangkum profil SHAPE-E Anda
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-3">
           <p>
             {recommendations.purposeStatement}
           </p>
+          <div className="text-xs text-muted-foreground italic bg-muted/30 p-3 rounded-md">
+            <p className="font-medium mb-1">Disclaimer:</p>
+            <p>Hasil asesmen SHAPE-E ini dirancang sebagai alat bantu untuk menemukan aspek tujuan hidup Anda, namun tidak bersifat mutlak. Hasil dapat bervariasi dan tidak menggantikan proses pencarian kehendak Tuhan melalui doa, pembimbingan rohani, dan pengalaman pribadi dengan-Nya. Gunakan hasil ini sebagai titik awal refleksi dalam perjalanan iman Anda.</p>
+          </div>
         </CardContent>
       </Card>
 

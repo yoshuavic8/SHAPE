@@ -87,10 +87,18 @@ export default function SpiritualQuestionnairePage() {
         return
       }
 
-      // Process answers into categories
-      const categorizedAnswers: Record<string, number[]> = {}
+      // Prepare data structure for saving
+      const spiritualGiftsData = {
+        // Save raw answers for each question
+        raw_answers: answers,
+
+        // Process answers into categories
+        categories: {} as Record<string, number>
+      }
 
       // Group answers by category
+      const categorizedAnswers: Record<string, number[]> = {}
+
       questions.forEach((question) => {
         const score = answers[question.id] || 0
         if (!categorizedAnswers[question.category]) {
@@ -100,18 +108,17 @@ export default function SpiritualQuestionnairePage() {
       })
 
       // Calculate average score for each category
-      const processedAnswers: Record<string, number> = {}
       Object.entries(categorizedAnswers).forEach(([category, scores]) => {
         const sum = scores.reduce((a, b) => a + b, 0)
         const avg = sum / scores.length
-        processedAnswers[category] = parseFloat(avg.toFixed(2))
+        spiritualGiftsData.categories[category] = parseFloat(avg.toFixed(2))
       })
 
       // Save to database
       const { error } = await supabase
         .from("questionnaire_results")
         .update({
-          spiritual_gifts: processedAnswers,
+          spiritual_gifts: spiritualGiftsData,
         })
         .eq("user_id", session.user.id)
 

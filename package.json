@@ -11,6 +11,7 @@
     "fill:questionnaire": "node scripts/fill-questionnaire.js"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^16.6.0",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "1.2.2",
     "@radix-ui/react-alert-dialog": "1.1.4",

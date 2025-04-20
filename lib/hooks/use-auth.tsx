@@ -119,7 +119,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 }
 
                 // Create empty questionnaire results
-                const { error: questionnaireError } = await supabase
+                console.log("Creating questionnaire entry for user:", data.user.id);
+
+                const { data: questionnaireData, error: questionnaireError } = await supabase
                     .from("questionnaire_results")
                     .insert({
                         user_id: data.user.id,
@@ -128,11 +130,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                         personality: {},
                         experiences: {},
                         is_completed: false,
-                    });
+                    })
+                    .select();
 
                 if (questionnaireError) {
+                    console.error("Error creating questionnaire entry:", questionnaireError);
                     return { error: questionnaireError.message };
                 }
+
+                console.log("Questionnaire entry created successfully:", questionnaireData);
             }
 
             router.push("/dashboard");

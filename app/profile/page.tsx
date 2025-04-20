@@ -95,19 +95,46 @@ export default function ProfilePage() {
     try {
       setLoading(true)
 
-      const { error } = await supabase
+      // First check if questionnaire exists
+      const { data: existingData, error: checkError } = await supabase
         .from("questionnaire_results")
-        .update({
-          spiritual_gifts: {},
-          heart_desire: {},
-          abilities: {},
-          personality: {},
-          is_completed: false,
-          completed_at: null,
-        })
+        .select("id")
         .eq("user_id", userId)
+        .single()
 
-      if (error) throw error
+      if (checkError && checkError.code !== "PGRST116") {
+        throw checkError
+      }
+
+      if (existingData) {
+        // Update existing questionnaire
+        const { error } = await supabase
+          .from("questionnaire_results")
+          .update({
+            spiritual_gifts: {},
+            heart_desire: {},
+            personality: {}, // Abilities now included in personality
+            experiences: {},
+            is_completed: false,
+          })
+          .eq("user_id", userId)
+
+        if (error) throw error
+      } else {
+        // Create new questionnaire entry
+        const { error } = await supabase
+          .from("questionnaire_results")
+          .insert({
+            user_id: userId,
+            spiritual_gifts: {},
+            heart_desire: {},
+            personality: {},
+            experiences: {},
+            is_completed: false,
+          })
+
+        if (error) throw error
+      }
 
       toast({
         title: "Questionnaire reset",
@@ -127,10 +154,18 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-6 py-8">
-      <div>
-        <h2 className="text-3xl font-bold tracking-tight">Profile</h2>
-        <p className="text-muted-foreground">Manage your account settings</p>
+    <div className="space-y-6 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight">Profile</h2>
+          <p className="text-muted-foreground">Manage your account settings</p>
+        </div>
+        <Button variant="outline" asChild>
+          <a href="/dashboard">
+            <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-4 w-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+            Back to Dashboard
+          </a>
+        </Button>
       </div>
 
       <Card>
@@ -150,10 +185,14 @@ export default function ProfilePage() {
               <p className="text-xs text-muted-foreground">Email cannot be changed</p>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button type="button" variant="outline" onClick={handleResetQuestionnaire} disabled={loading}>
-              Reset Questionnaire
-            </Button>
+          <CardFooter className="flex justify-end">
+            {/*
+              Reset Questionnaire button is hidden from users for safety
+              To re-enable it, uncomment the button below and change the CardFooter className to "flex justify-between"
+              <Button type="button" variant="outline" onClick={handleResetQuestionnaire} disabled={loading}>
+                Reset Questionnaire
+              </Button>
+            */}
             <Button type="submit" disabled={loading}>
               {loading ? "Saving..." : "Save Changes"}
             </Button>

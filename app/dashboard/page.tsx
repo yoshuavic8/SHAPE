@@ -63,6 +63,13 @@ export default async function Dashboard() {
                 ? "You have completed the SHAPE questionnaire."
                 : "Start or continue your SHAPE questionnaire."}
             </CardDescription>
+            {isCompleted && (
+              <div className="mt-2 pt-2 border-t border-dashed border-slate-200">
+                <p className="text-xs text-muted-foreground italic">
+                  <span className="font-medium">Disclaimer:</span> Hasil asesmen SHAPE-E ini dirancang sebagai alat bantu untuk menemukan aspek tujuan hidup Anda, namun tidak bersifat mutlak. Hasil dapat bervariasi dan tidak menggantikan proses pencarian kehendak Tuhan melalui doa, pembimbingan rohani, dan pengalaman pribadi dengan-Nya.
+                </p>
+              </div>
+            )}
           </CardHeader>
           <CardContent>
             {isCompleted ? (
@@ -86,9 +93,7 @@ export default async function Dashboard() {
               SHAPE is an acronym that stands for Spiritual gifts, Heart desire, Abilities, and Personality. This
               assessment helps you understand how you're uniquely designed to serve and contribute.
             </p>
-            <Link href="/about">
-              <Button variant="outline">Learn More</Button>
-            </Link>
+
           </CardContent>
         </Card>
       </div>

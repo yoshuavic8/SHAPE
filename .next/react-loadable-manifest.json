@@ -24,8 +24,8 @@
   "node_modules/jspdf/dist/jspdf.es.min.js -> canvg": {
     "id": 34137,
     "files": [
-      "static/chunks/bc98253f.d21a5b1e2e1a8f86.js",
-      "static/chunks/121.7560c80c038f73cc.js"
+      "static/chunks/bc98253f.fdffbd48dc845d22.js",
+      "static/chunks/121.b8f33cdb1e3f0dbf.js"
     ]
   },
   "node_modules/jspdf/dist/jspdf.es.min.js -> dompurify": {

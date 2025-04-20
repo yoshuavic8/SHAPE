@@ -38,7 +38,7 @@ export default async function QuestionnairePage() {
   }
 
   // Check if we already have a questionnaire in progress
-  const { data: existingQuestionnaire } = await supabase
+  const { data: existingQuestionnaire, error: fetchError } = await supabase
     .from("questionnaire_results")
     .select("*")
     .eq("user_id", session.user.id)
@@ -46,14 +46,32 @@ export default async function QuestionnairePage() {
 
   // If not, create a new entry
   if (!existingQuestionnaire) {
-    await supabase.from("questionnaire_results").insert({
-      user_id: session.user.id,
-      spiritual_gifts: {},
-      heart_desire: {},
-      personality: {}, // Now includes abilities
-      experiences: {},
-      is_completed: false,
-    })
+    console.log("No existing questionnaire found for user ID:", session.user.id)
+    console.log("Creating new questionnaire entry...")
+
+    const { data: newEntry, error: insertError } = await supabase
+      .from("questionnaire_results")
+      .insert({
+        user_id: session.user.id,
+        spiritual_gifts: {},
+        heart_desire: {},
+        personality: {}, // Now includes abilities
+        experiences: {},
+        is_completed: false,
+      })
+      .select()
+
+    if (insertError) {
+      console.error("Error creating questionnaire entry:", insertError)
+    } else {
+      console.log("New questionnaire entry created:", newEntry)
+    }
+  } else {
+    console.log("Existing questionnaire found for user ID:", session.user.id)
+  }
+
+  if (fetchError && fetchError.code !== "PGRST116") { // PGRST116 is the error code for "no rows returned"
+    console.error("Error fetching questionnaire:", fetchError)
   }
 
   return (

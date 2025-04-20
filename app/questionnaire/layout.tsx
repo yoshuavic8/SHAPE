@@ -49,5 +49,5 @@ export default async function QuestionnaireLayout({ children }: QuestionnaireLay
     redirect("/results")
   }
 
-  return <div className="max-w-4xl mx-auto">{children}</div>
+  return <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">{children}</div>
 }
