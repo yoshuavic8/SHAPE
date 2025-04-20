@@ -532,7 +532,7 @@ export const heartQuestions: Question[] = [
   },
   {
     id: 25,
-    text: "Bidang apa yang paling menarik bagi Anda?",
+    text: "Pilih bidang apa yang paling menarik bagi Anda?",
     category: "heart",
     subcategory: "passion",
     type: "multiple",

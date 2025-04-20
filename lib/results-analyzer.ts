@@ -307,9 +307,9 @@ export function analyzeHeartDesire(answers: Answers): CategoryScore[] {
     { id: 21, subcategory: "passion", type: "scale" },
     { id: 22, subcategory: "passion", type: "scale" },
     { id: 23, subcategory: "passion", type: "scale" },
-    { id: 24, subcategory: "passion", type: "scale" },
+    { id: 24, subcategory: "passion", type: "multiple" },
+    { id: 25, subcategory: "passion", type: "multiple" },
     // Values questions
-    { id: 25, subcategory: "values", type: "scale" },
     { id: 26, subcategory: "values", type: "scale" },
     { id: 27, subcategory: "values", type: "scale" },
     { id: 28, subcategory: "values", type: "scale" },
