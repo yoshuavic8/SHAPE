@@ -1,0 +1,17 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/send-pdf-email/route": "/api/send-pdf-email",
+  "/auth/login/page": "/auth/login",
+  "/auth/register/page": "/auth/register",
+  "/profile/page": "/profile",
+  "/results/page": "/results",
+  "/page": "/",
+  "/questionnaire/abilities/page": "/questionnaire/abilities",
+  "/questionnaire/continue/page": "/questionnaire/continue",
+  "/questionnaire/heart/page": "/questionnaire/heart",
+  "/questionnaire/personality/page": "/questionnaire/personality",
+  "/questionnaire/experiences/page": "/questionnaire/experiences",
+  "/questionnaire/page": "/questionnaire",
+  "/questionnaire/spiritual/page": "/questionnaire/spiritual",
+  "/dashboard/page": "/dashboard"
+}

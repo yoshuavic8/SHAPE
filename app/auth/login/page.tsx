@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -12,7 +12,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from "@/components/ui/use-toast"
 import { useAuth } from "@/lib/hooks/use-auth"
 
-export default function LoginPage() {
+// Component to handle search params with Suspense
+function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -100,5 +101,30 @@ export default function LoginPage() {
         </form>
       </Card>
     </div>
+  )
+}
+
+// Main component with Suspense boundary
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center px-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-2xl">Sign In</CardTitle>
+            <CardDescription>Loading...</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="h-8 bg-gray-200 animate-pulse rounded"></div>
+            <div className="h-8 bg-gray-200 animate-pulse rounded"></div>
+          </CardContent>
+          <CardFooter>
+            <Button disabled className="w-full">Loading...</Button>
+          </CardFooter>
+        </Card>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
