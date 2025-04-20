@@ -15,7 +15,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="border-b">
-        <div className="container flex h-16 items-center justify-between py-4">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between py-4">
           <h1 className="text-2xl font-bold">SHAPE-E Questionnaire</h1>
           <div className="flex items-center gap-4">
             <Link href="/auth/login">
@@ -28,9 +28,9 @@ export default async function Home() {
         </div>
       </header>
       <main className="flex-1">
-        <section className="py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-4 text-center">
+        <section className="py-12 md:py-10 lg:py-16">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col items-center space-y-3 text-center">
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Temukan SHAPE-E Anda</h2>
                 <p className="max-w-[700px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
@@ -38,23 +38,18 @@ export default async function Home() {
                   memahami bagaimana Anda dapat melayani dan berkontribusi.
                 </p>
               </div>
-              <div className="space-x-4">
+              <div>
                 <Link href="/auth/register">
                   <Button size="lg">Mulai Sekarang</Button>
-                </Link>
-                <Link href="/about">
-                  <Button variant="outline" size="lg">
-                    Pelajari Lebih Lanjut
-                  </Button>
                 </Link>
               </div>
             </div>
           </div>
         </section>
-        <section className="py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
-              <div className="flex flex-col items-center space-y-2 border rounded-lg p-6 bg-white dark:bg-gray-950">
+        <section className="py-4 md:py-6 lg:py-8 bg-gray-100 dark:bg-gray-800">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-4 sm:gap-6 lg:gap-8 sm:grid-cols-2 lg:grid-cols-5">
+              <div className="flex flex-col items-center space-y-2 border rounded-lg px-3 py-4 bg-white dark:bg-gray-950">
                 <div className="p-2 bg-green-100 rounded-full dark:bg-green-900">
                   <svg
                     className="w-6 h-6 text-green-600 dark:text-green-400"
@@ -77,7 +72,7 @@ export default async function Home() {
                   Temukan karunia rohani unik Anda dan bagaimana menggunakannya.
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-2 border rounded-lg p-6 bg-white dark:bg-gray-950">
+              <div className="flex flex-col items-center space-y-2 border rounded-lg px-3 py-4 bg-white dark:bg-gray-950">
                 <div className="p-2 bg-red-100 rounded-full dark:bg-red-900">
                   <svg
                     className="w-6 h-6 text-red-600 dark:text-red-400"
@@ -99,7 +94,7 @@ export default async function Home() {
                   Pahami apa yang memotivasi Anda dan apa yang menjadi passion Anda.
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-2 border rounded-lg p-6 bg-white dark:bg-gray-950">
+              <div className="flex flex-col items-center space-y-2 border rounded-lg px-3 py-4 bg-white dark:bg-gray-950">
                 <div className="p-2 bg-blue-100 rounded-full dark:bg-blue-900">
                   <svg
                     className="w-6 h-6 text-blue-600 dark:text-blue-400"
@@ -126,7 +121,7 @@ export default async function Home() {
                   Kenali talenta alami dan keterampilan yang Anda miliki.
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-2 border rounded-lg p-6 bg-white dark:bg-gray-950">
+              <div className="flex flex-col items-center space-y-2 border rounded-lg px-3 py-4 bg-white dark:bg-gray-950">
                 <div className="p-2 bg-purple-100 rounded-full dark:bg-purple-900">
                   <svg
                     className="w-6 h-6 text-purple-600 dark:text-purple-400"
@@ -151,7 +146,7 @@ export default async function Home() {
                   Pelajari tentang tipe kepribadian Anda dan bagaimana hal itu membentuk interaksi Anda.
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-2 border rounded-lg p-6 bg-white dark:bg-gray-950">
+              <div className="flex flex-col items-center space-y-2 border rounded-lg px-3 py-4 bg-white dark:bg-gray-950">
                 <div className="p-2 bg-amber-100 rounded-full dark:bg-amber-900">
                   <svg
                     className="w-6 h-6 text-amber-600 dark:text-amber-400"
@@ -178,17 +173,14 @@ export default async function Home() {
           </div>
         </section>
       </main>
-      <footer className="border-t py-6">
-        <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
+      <footer className="border-t py-3">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm text-gray-500 dark:text-gray-400">
             © 2024 SHAPE-E Questionnaire. Hak Cipta Dilindungi.
           </p>
-          <div className="flex gap-4">
+          <div>
             <Link href="/privacy" className="text-sm text-gray-500 hover:underline dark:text-gray-400">
               Kebijakan Privasi
-            </Link>
-            <Link href="/terms" className="text-sm text-gray-500 hover:underline dark:text-gray-400">
-              Syarat Layanan
             </Link>
           </div>
         </div>
