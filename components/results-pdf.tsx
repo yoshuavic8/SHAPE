@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import type { CategoryScore } from "@/lib/results-analyzer"
+import type { CategoryScore } from "@/lib/shape-analyzer-adapter"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
 import { useToast } from "@/components/ui/use-toast"

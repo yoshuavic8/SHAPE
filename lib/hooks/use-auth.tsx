@@ -11,7 +11,8 @@ type AuthContextType = {
     isLoading: boolean;
     signIn: (
         email: string,
-        password: string
+        password: string,
+        redirectTo?: string
     ) => Promise<{ error: string | null }>;
     signUp: (
         email: string,
@@ -63,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         };
     }, []);
 
-    const signIn = async (email: string, password: string) => {
+    const signIn = async (email: string, password: string, redirectTo: string = "/dashboard") => {
         try {
             const { error } = await supabase.auth.signInWithPassword({
                 email,
@@ -74,7 +75,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 return { error: error.message };
             }
 
-            router.push("/dashboard");
+            // Redirect to specified path or dashboard after successful login
+            router.push(redirectTo);
             router.refresh();
             return { error: null };
         } catch (error: any) {
@@ -141,7 +143,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 console.log("Questionnaire entry created successfully:", questionnaireData);
             }
 
-            router.push("/dashboard");
+            // Redirect to login page instead of dashboard after signup
+            router.push("/auth/login?registered=true");
             router.refresh();
             return { error: null };
         } catch (error: any) {

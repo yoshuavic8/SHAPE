@@ -32,7 +32,8 @@ export default function RegisterPage() {
 
       toast({
         title: "Registration successful",
-        description: "Your account has been created",
+        description: "Your account has been created. Redirecting to login page...",
+        duration: 5000,
       })
     } catch (error: any) {
       toast({

@@ -1,5 +1,5 @@
 "use client"
-import type { CategoryScore } from "@/lib/results-analyzer"
+import type { CategoryScore } from "@/lib/shape-analyzer-adapter"
 
 interface ResultsChartProps {
   data: CategoryScore[]

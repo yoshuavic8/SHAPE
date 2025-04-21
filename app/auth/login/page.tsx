@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, Suspense } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -21,18 +21,20 @@ function LoginForm() {
   const { signIn } = useAuth()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectedFrom') || '/dashboard'
+  const justRegistered = searchParams.get('registered') === 'true'
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
     try {
-      const { error } = await signIn(email, password)
+      const { error } = await signIn(email, password, redirectTo)
 
       if (error) {
         throw new Error(error)
       }
 
+      // Pengalihan akan ditangani oleh fungsi signIn di useAuth
       toast({
         title: "Login successful",
         description: "You have been signed in",
@@ -47,6 +49,17 @@ function LoginForm() {
       setLoading(false)
     }
   }
+
+  // Show toast notification if user just registered
+  useEffect(() => {
+    if (justRegistered) {
+      toast({
+        title: "Registration successful",
+        description: "Your account has been created. Please sign in with your credentials.",
+        duration: 5000,
+      })
+    }
+  }, [justRegistered, toast])
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">

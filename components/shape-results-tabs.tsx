@@ -6,8 +6,9 @@ import { ShapeRadarChart } from "@/components/shape-radar-chart"
 import { ResultsChart } from "@/components/results-chart"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
-import type { CategoryScore } from "@/lib/results-analyzer"
-import type { ShapeRecommendations } from "@/lib/results-analyzer"
+import { ReflectiveInsightsSection } from "@/components/reflective-insights-section"
+import { ReflectiveOverviewSection } from "@/components/reflective-overview-section"
+import type { CategoryScore, ShapeRecommendations } from "@/lib/shape-analyzer-adapter"
 
 interface ShapeResultsTabsProps {
   spiritualGifts: CategoryScore[]
@@ -77,26 +78,34 @@ export function ShapeResultsTabs({
               ))}
             </ul>
 
-            {recommendations.shapeProfile?.personality?.analysis && (
+            {recommendations.shapeProfile?.personality?.analysis && recommendations.shapeProfile.personality.analysis.shapeIntegration && (
               <div className="mt-4 border-t pt-4">
                 <h4 className="font-medium mb-2">Integrasi SHAPE Berdasarkan Tipe Kepribadian</h4>
                 <div className="space-y-3 text-sm">
-                  <p>
-                    <span className="font-semibold">Spiritual Gifts + {recommendations.shapeProfile.personality.type}:</span>{' '}
-                    {recommendations.shapeProfile.personality.analysis.shapeIntegration.spiritualGifts}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Heart Desire + {recommendations.shapeProfile.personality.type}:</span>{' '}
-                    {recommendations.shapeProfile.personality.analysis.shapeIntegration.heartDesire}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Abilities + {recommendations.shapeProfile.personality.type}:</span>{' '}
-                    {recommendations.shapeProfile.personality.analysis.shapeIntegration.abilities}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Experiences + {recommendations.shapeProfile.personality.type}:</span>{' '}
-                    {recommendations.shapeProfile.personality.analysis.shapeIntegration.experiences}
-                  </p>
+                  {recommendations.shapeProfile.personality.analysis.shapeIntegration.spiritualGifts && (
+                    <p>
+                      <span className="font-semibold">Spiritual Gifts + {recommendations.shapeProfile.personality.type}:</span>{' '}
+                      {recommendations.shapeProfile.personality.analysis.shapeIntegration.spiritualGifts}
+                    </p>
+                  )}
+                  {recommendations.shapeProfile.personality.analysis.shapeIntegration.heartDesire && (
+                    <p>
+                      <span className="font-semibold">Heart Desire + {recommendations.shapeProfile.personality.type}:</span>{' '}
+                      {recommendations.shapeProfile.personality.analysis.shapeIntegration.heartDesire}
+                    </p>
+                  )}
+                  {recommendations.shapeProfile.personality.analysis.shapeIntegration.abilities && (
+                    <p>
+                      <span className="font-semibold">Abilities + {recommendations.shapeProfile.personality.type}:</span>{' '}
+                      {recommendations.shapeProfile.personality.analysis.shapeIntegration.abilities}
+                    </p>
+                  )}
+                  {recommendations.shapeProfile.personality.analysis.shapeIntegration.experiences && (
+                    <p>
+                      <span className="font-semibold">Experiences + {recommendations.shapeProfile.personality.type}:</span>{' '}
+                      {recommendations.shapeProfile.personality.analysis.shapeIntegration.experiences}
+                    </p>
+                  )}
                 </div>
               </div>
             )}
@@ -119,6 +128,10 @@ export function ShapeResultsTabs({
             </ul>
           </CardContent>
         </Card>
+
+        {recommendations.shapeProfile?.reflectiveInsights && (
+          <ReflectiveOverviewSection reflectiveInsights={recommendations.shapeProfile.reflectiveInsights} />
+        )}
       </TabsContent>
 
       <TabsContent value="development" className="p-4 space-y-6">
@@ -195,32 +208,38 @@ export function ShapeResultsTabs({
                 <h4 className="font-medium mb-2">Rekomendasi Berdasarkan Tipe Kepribadian</h4>
 
                 <div className="space-y-4">
-                  <div>
-                    <h5 className="text-sm font-medium">Pelayanan yang Direkomendasikan:</h5>
-                    <ul className="list-disc list-inside text-sm text-muted-foreground mt-1">
-                      {recommendations.shapeProfile.personality.analysis.recommendations.ministry.map((ministry, idx) => (
-                        <li key={idx}>{ministry}</li>
-                      ))}
-                    </ul>
-                  </div>
+                  {recommendations.shapeProfile.personality.analysis.recommendations.ministry && (
+                    <div>
+                      <h5 className="text-sm font-medium">Pelayanan yang Direkomendasikan:</h5>
+                      <ul className="list-disc list-inside text-sm text-muted-foreground mt-1">
+                        {recommendations.shapeProfile.personality.analysis.recommendations.ministry.map((ministry, idx) => (
+                          <li key={idx}>{ministry}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
-                  <div>
-                    <h5 className="text-sm font-medium">Contoh Spesifik:</h5>
-                    <ul className="list-disc list-inside text-sm text-muted-foreground mt-1">
-                      {recommendations.shapeProfile.personality.analysis.recommendations.specificExamples.map((example, idx) => (
-                        <li key={idx}>{example}</li>
-                      ))}
-                    </ul>
-                  </div>
+                  {recommendations.shapeProfile.personality.analysis.recommendations.specificExamples && (
+                    <div>
+                      <h5 className="text-sm font-medium">Contoh Spesifik:</h5>
+                      <ul className="list-disc list-inside text-sm text-muted-foreground mt-1">
+                        {recommendations.shapeProfile.personality.analysis.recommendations.specificExamples.map((example, idx) => (
+                          <li key={idx}>{example}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
-                  <div>
-                    <h5 className="text-sm font-medium">Karir yang Cocok:</h5>
-                    <ul className="list-disc list-inside text-sm text-muted-foreground mt-1">
-                      {recommendations.shapeProfile.personality.analysis.recommendations.career.map((career, idx) => (
-                        <li key={idx}>{career}</li>
-                      ))}
-                    </ul>
-                  </div>
+                  {recommendations.shapeProfile.personality.analysis.recommendations.career && (
+                    <div>
+                      <h5 className="text-sm font-medium">Karir yang Cocok:</h5>
+                      <ul className="list-disc list-inside text-sm text-muted-foreground mt-1">
+                        {recommendations.shapeProfile.personality.analysis.recommendations.career.map((career, idx) => (
+                          <li key={idx}>{career}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -245,8 +264,8 @@ export function ShapeResultsTabs({
                 <div className="space-y-3">
                   {recommendations.shapeProfile.personality.analysis.developmentTips.map((tip, index) => (
                     <div key={index} className="ml-2">
-                      <p className="font-medium text-sm">{tip.title}</p>
-                      <p className="text-sm text-muted-foreground">{tip.description}</p>
+                      <p className="font-medium text-sm">{tip.title || 'Tip ' + (index + 1)}</p>
+                      <p className="text-sm text-muted-foreground">{tip.description || 'Tidak ada deskripsi'}</p>
                     </div>
                   ))}
                 </div>
@@ -336,7 +355,7 @@ export function ShapeResultsTabs({
             <CardTitle>Heart Desire</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResultsChart data={heartDesire} title="" colorClass="bg-red-500" />
+            <ResultsChart data={heartDesire.filter(h => h.type === "scale" || h.type === "multiple")} title="" colorClass="bg-red-500" />
 
             <div className="mt-6">
               <h4 className="text-lg font-bold mb-2">What is Heart Desire?</h4>
@@ -388,6 +407,8 @@ export function ShapeResultsTabs({
             </div>
           </CardContent>
         </Card>
+
+        <ReflectiveInsightsSection heartDesire={heartDesire} />
       </TabsContent>
 
       <TabsContent value="personality" className="p-4 space-y-6">
@@ -499,15 +520,16 @@ export function ShapeResultsTabs({
                     <div className="mt-2 pt-2 border-t border-dashed border-slate-200">
                       <p className="text-xs text-slate-600">
                         <span className="font-medium">Bagaimana memanfaatkan pengalaman ini: </span>
-                        {exp.category.includes("Kepemimpinan") && "Bagikan pelajaran kepemimpinan yang Anda peroleh, mentori pemimpin muda, dan gunakan pengalaman Anda untuk memimpin dengan lebih efektif."}
-                        {exp.category.includes("Pengajaran") && "Kembangkan metode pengajaran yang efektif berdasarkan pengalaman Anda, bagikan studi kasus dari pengalaman nyata, dan mentori guru baru."}
-                        {exp.category.includes("Pelayanan") && "Gunakan pengalaman pelayanan Anda untuk mengidentifikasi kebutuhan yang belum terpenuhi, latih orang lain dalam pelayanan, dan kembangkan program pelayanan baru."}
-                        {exp.category.includes("Kreativitas") && "Gunakan kreativitas Anda untuk menginspirasi orang lain, kembangkan solusi inovatif untuk masalah, dan ajarkan teknik kreatif kepada orang lain."}
-                        {exp.category.includes("Analitis") && "Terapkan keterampilan analitis Anda untuk memecahkan masalah kompleks, bantu organisasi dengan perencanaan strategis, dan mentori orang lain dalam pemikiran kritis."}
-                        {exp.category.includes("Ketahanan") && "Bagikan kisah ketahanan Anda untuk menginspirasi orang lain, mentori mereka yang menghadapi kesulitan serupa, dan kembangkan program untuk membangun ketahanan."}
-                        {exp.category.includes("Spiritual") && "Gunakan pengalaman spiritual Anda untuk membimbing orang lain dalam perjalanan iman mereka, bagikan wawasan dari pengalaman Anda, dan kembangkan materi untuk pertumbuhan rohani."}
-                        {exp.category.includes("Relasional") && "Gunakan keterampilan relasional Anda untuk membangun jembatan antar kelompok, mentori orang lain dalam keterampilan interpersonal, dan fasilitasi resolusi konflik."}
-                        {!exp.category.includes("Tema") && "Refleksikan pelajaran yang Anda peroleh dari pengalaman ini, identifikasi bagaimana Tuhan telah menggunakannya dalam hidup Anda, dan carilah cara untuk membagikan wawasan Anda dengan orang lain."}
+                        {exp.category && typeof exp.category === 'string' && exp.category.includes("Kepemimpinan") && "Bagikan pelajaran kepemimpinan yang Anda peroleh, mentori pemimpin muda, dan gunakan pengalaman Anda untuk memimpin dengan lebih efektif."}
+                        {exp.category && typeof exp.category === 'string' && exp.category.includes("Pengajaran") && "Kembangkan metode pengajaran yang efektif berdasarkan pengalaman Anda, bagikan studi kasus dari pengalaman nyata, dan mentori guru baru."}
+                        {exp.category && typeof exp.category === 'string' && exp.category.includes("Pelayanan") && "Gunakan pengalaman pelayanan Anda untuk mengidentifikasi kebutuhan yang belum terpenuhi, latih orang lain dalam pelayanan, dan kembangkan program pelayanan baru."}
+                        {exp.category && typeof exp.category === 'string' && exp.category.includes("Kreativitas") && "Gunakan kreativitas Anda untuk menginspirasi orang lain, kembangkan solusi inovatif untuk masalah, dan ajarkan teknik kreatif kepada orang lain."}
+                        {exp.category && typeof exp.category === 'string' && exp.category.includes("Analitis") && "Terapkan keterampilan analitis Anda untuk memecahkan masalah kompleks, bantu organisasi dengan perencanaan strategis, dan mentori orang lain dalam pemikiran kritis."}
+                        {exp.category && typeof exp.category === 'string' && exp.category.includes("Ketahanan") && "Bagikan kisah ketahanan Anda untuk menginspirasi orang lain, mentori mereka yang menghadapi kesulitan serupa, dan kembangkan program untuk membangun ketahanan."}
+                        {exp.category && typeof exp.category === 'string' && exp.category.includes("Spiritual") && "Gunakan pengalaman spiritual Anda untuk membimbing orang lain dalam perjalanan iman mereka, bagikan wawasan dari pengalaman Anda, dan kembangkan materi untuk pertumbuhan rohani."}
+                        {exp.category && typeof exp.category === 'string' && exp.category.includes("Relasional") && "Gunakan keterampilan relasional Anda untuk membangun jembatan antar kelompok, mentori orang lain dalam keterampilan interpersonal, dan fasilitasi resolusi konflik."}
+                        {exp.category && typeof exp.category === 'string' && !exp.category.includes("Tema") && "Refleksikan pelajaran yang Anda peroleh dari pengalaman ini, identifikasi bagaimana Tuhan telah menggunakannya dalam hidup Anda, dan carilah cara untuk membagikan wawasan Anda dengan orang lain."}
+                        {(!exp.category || typeof exp.category !== 'string') && "Refleksikan pelajaran yang Anda peroleh dari pengalaman ini, identifikasi bagaimana Tuhan telah menggunakannya dalam hidup Anda, dan carilah cara untuk membagikan wawasan Anda dengan orang lain."}
                       </p>
                     </div>
                   </div>
@@ -617,8 +639,13 @@ function getAbilityDescription(ability: string): string {
 }
 
 function getExperienceDescription(experience: string): string {
+  // Check if experience is undefined or null
+  if (!experience) {
+    return "Pengalaman yang telah berkontribusi pada pertumbuhan Anda dan mempersiapkan Anda untuk tujuan Anda.";
+  }
+
   // Check if it's a theme experience
-  if (experience.includes("Tema Pengalaman:")) {
+  if (typeof experience === 'string' && experience.includes("Tema Pengalaman:")) {
     const theme = experience.replace("Tema Pengalaman: ", "")
 
     const themeDescriptions: Record<string, string> = {

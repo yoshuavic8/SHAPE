@@ -96,23 +96,28 @@ export default function SpiritualQuestionnairePage() {
         categories: {} as Record<string, number>
       }
 
-      // Group answers by category
+      // Group answers by subcategory
       const categorizedAnswers: Record<string, number[]> = {}
 
       questions.forEach((question) => {
         const score = answers[question.id] || 0
-        if (!categorizedAnswers[question.category]) {
-          categorizedAnswers[question.category] = []
+        if (question.subcategory) {
+          if (!categorizedAnswers[question.subcategory]) {
+            categorizedAnswers[question.subcategory] = []
+          }
+          categorizedAnswers[question.subcategory].push(score)
         }
-        categorizedAnswers[question.category].push(score)
       })
 
-      // Calculate average score for each category
-      Object.entries(categorizedAnswers).forEach(([category, scores]) => {
+      // Calculate average score for each subcategory
+      Object.entries(categorizedAnswers).forEach(([subcategory, scores]) => {
         const sum = scores.reduce((a, b) => a + b, 0)
         const avg = sum / scores.length
-        spiritualGiftsData.categories[category] = parseFloat(avg.toFixed(2))
+        spiritualGiftsData.categories[subcategory] = parseFloat(avg.toFixed(2))
       })
+
+      // Log for debugging
+      console.log('Spiritual Gifts Data:', spiritualGiftsData)
 
       // Save to database
       const { error } = await supabase

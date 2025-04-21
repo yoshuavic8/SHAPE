@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import type { CategoryScore, ShapeRecommendations } from "@/lib/results-analyzer"
+import type { CategoryScore, ShapeRecommendations } from "@/lib/shape-analyzer-adapter"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
 import { useToast } from "@/components/ui/use-toast"

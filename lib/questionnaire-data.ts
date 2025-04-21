@@ -5,8 +5,8 @@ export interface Question {
   text: string;
   category: "spiritual" | "heart" | "abilities" | "personality" | "experiences";
   subcategory?: string;
-  type?: "scale" | "open" | "multiple";
-  options?: string[];
+  type?: "scale" | "open" | "multiple" | "binary";
+  options?: string[] | Array<{ value: string; text: string }>;
 }
 
 export interface QuestionnaireSection {
@@ -500,188 +500,234 @@ export const spiritualGiftsQuestions: Question[] = [
 ];
 
 export const heartQuestions: Question[] = [
-  // 1. Passion & Minat
+  // 1. Religion/Spirituality
   {
     id: 21,
-    text: "Seberapa sering Anda memikirkan atau membicarakan topik tertentu tanpa merasa bosan?",
+    text: "Seberapa besar hasrat Anda untuk terlibat dalam pelayanan rohani atau kegiatan keagamaan?",
     category: "heart",
-    subcategory: "passion",
+    subcategory: "religion",
     type: "scale",
   },
   {
     id: 22,
-    text: "Apakah Anda rela mengorbankan waktu luang untuk terlibat dalam aktivitas tertentu?",
+    text: "Seberapa penting bagi Anda untuk mempengaruhi orang lain dalam pertumbuhan rohani mereka?",
     category: "heart",
-    subcategory: "passion",
+    subcategory: "religion",
     type: "scale",
   },
   {
     id: 23,
-    text: "Seberapa besar keinginan Anda untuk mempelajari hal-hal baru di bidang yang Anda sukai?",
+    text: "Pilih area pelayanan rohani yang paling menarik bagi Anda:",
     category: "heart",
-    subcategory: "passion",
-    type: "scale",
-  },
-  {
-    id: 24,
-    text: "Jika diberi kesempatan, apakah Anda ingin menjadikan passion ini sebagai karir atau pelayanan?",
-    category: "heart",
-    subcategory: "passion",
-    type: "multiple",
-    options: ["Karir", "Pelayanan", "Keduanya", "Tidak yakin"],
-  },
-  {
-    id: 25,
-    text: "Pilih bidang apa yang paling menarik bagi Anda?",
-    category: "heart",
-    subcategory: "passion",
+    subcategory: "religion",
     type: "multiple",
     options: [
-      "Seni & Kreativitas",
-      "Pendidikan & Pengajaran",
-      "Kesehatan & Kesejahteraan",
-      "Teknologi & Inovasi",
-      "Lingkungan & Keberlanjutan",
-      "Keadilan Sosial & HAM",
-      "Spiritualitas & Pertumbuhan Rohani",
-      "Kewirausahaan",
+      "Pengajaran Alkitab",
+      "Doa dan Penyembahan",
+      "Pelayanan Pastoral",
+      "Misi dan Penginjilan",
+      "Pelayanan Anak/Remaja",
+      "Konseling Rohani",
     ],
   },
 
-  // 2. Nilai Hidup
+  // 2. Family
   {
-    id: 26,
-    text: "Seberapa penting bagi Anda untuk hidup sesuai dengan prinsip kebenaran?",
+    id: 24,
+    text: "Seberapa besar hasrat Anda untuk mempengaruhi dan memperkuat kehidupan keluarga?",
     category: "heart",
-    subcategory: "values",
+    subcategory: "family",
     type: "scale",
   },
   {
-    id: 27,
-    text: "Apakah Anda merasa terpanggil untuk memperjuangkan hak orang lain?",
+    id: 25,
+    text: "Seberapa penting bagi Anda untuk terlibat dalam pelayanan yang berfokus pada keluarga?",
     category: "heart",
-    subcategory: "values",
+    subcategory: "family",
+    type: "scale",
+  },
+  {
+    id: 26,
+    text: "Pilih area pelayanan keluarga yang paling menarik bagi Anda:",
+    category: "heart",
+    subcategory: "family",
+    type: "multiple",
+    options: [
+      "Konseling Pernikahan",
+      "Pendampingan Orang Tua",
+      "Pelayanan Anak",
+      "Pelayanan Remaja",
+      "Pelayanan Lansia",
+      "Pemulihan Keluarga",
+    ],
+  },
+
+  // 3. Education
+  {
+    id: 27,
+    text: "Seberapa besar hasrat Anda untuk terlibat dalam dunia pendidikan?",
+    category: "heart",
+    subcategory: "education",
     type: "scale",
   },
   {
     id: 28,
-    text: "Seberapa besar Anda menghargai hubungan keluarga dan persahabatan?",
+    text: "Seberapa penting bagi Anda untuk mempengaruhi sistem pendidikan atau mengajar orang lain?",
     category: "heart",
-    subcategory: "values",
+    subcategory: "education",
     type: "scale",
   },
   {
     id: 29,
-    text: "Urutkan 5 nilai ini dari yang paling penting (1) hingga kurang penting (5):",
+    text: "Pilih area pendidikan yang paling menarik bagi Anda:",
     category: "heart",
-    subcategory: "values",
-    type: "multiple",
-    options: ["Integritas", "Keadilan", "Kreativitas", "Iman", "Kebebasan"],
-  },
-
-  // 3. Emosi & Triggers
-  {
-    id: 30,
-    text: "Situasi apa yang paling membuat Anda marah atau frustrasi?",
-    category: "heart",
-    subcategory: "emotions",
+    subcategory: "education",
     type: "multiple",
     options: [
-      "Ketidakadilan",
-      "Pemborosan sumber daya",
-      "Pengabaian terhadap orang lemah",
-      "Kebohongan",
-      "Penindasan kreativitas",
+      "Pendidikan Anak Usia Dini",
+      "Pendidikan Dasar/Menengah",
+      "Pendidikan Tinggi",
+      "Pendidikan Vokasi/Keterampilan",
+      "Pendidikan Khusus/Inklusif",
+      "Pengembangan Kurikulum",
     ],
+  },
+
+  // 4. Government
+  {
+    id: 30,
+    text: "Seberapa besar hasrat Anda untuk terlibat dalam pemerintahan atau kebijakan publik?",
+    category: "heart",
+    subcategory: "government",
+    type: "scale",
   },
   {
     id: 31,
-    text: "Hal apa yang paling membuat Anda sedih?",
+    text: "Seberapa penting bagi Anda untuk mempengaruhi kebijakan atau sistem pemerintahan?",
     category: "heart",
-    subcategory: "emotions",
-    type: "multiple",
-    options: [
-      "Kemiskinan anak-anak",
-      "Kerusakan lingkungan",
-      "Krisis iman di masyarakat",
-      "Kesenjangan pendidikan",
-    ],
+    subcategory: "government",
+    type: "scale",
   },
   {
     id: 32,
-    text: "Apa yang membuat Anda merasa paling bersyukur?",
+    text: "Pilih area pemerintahan yang paling menarik bagi Anda:",
     category: "heart",
-    subcategory: "emotions",
+    subcategory: "government",
     type: "multiple",
     options: [
-      "Melihat orang lain bertumbuh",
-      "Menyelesaikan proyek bermakna",
-      "Hubungan yang harmonis",
-      "Pengalaman spiritual",
+      "Kebijakan Publik",
+      "Hukum dan Keadilan",
+      "Pelayanan Masyarakat",
+      "Advokasi dan HAM",
+      "Politik Lokal/Nasional",
+      "Hubungan Internasional",
     ],
   },
 
-  // 4. Aktivitas yang Membangkitkan Energi
+  // 5. Media
   {
     id: 33,
-    text: "Membimbing orang lain secara personal.",
+    text: "Seberapa besar hasrat Anda untuk terlibat dalam dunia media dan komunikasi?",
     category: "heart",
-    subcategory: "activities",
+    subcategory: "media",
     type: "scale",
   },
   {
     id: 34,
-    text: "Menciptakan karya seni atau desain.",
+    text: "Seberapa penting bagi Anda untuk mempengaruhi opini publik melalui media?",
     category: "heart",
-    subcategory: "activities",
+    subcategory: "media",
     type: "scale",
   },
   {
     id: 35,
-    text: "Berdiskusi tentang ide-ide baru.",
+    text: "Pilih area media yang paling menarik bagi Anda:",
     category: "heart",
-    subcategory: "activities",
-    type: "scale",
+    subcategory: "media",
+    type: "multiple",
+    options: [
+      "Jurnalisme",
+      "Media Sosial",
+      "Produksi Video/Film",
+      "Penyiaran (Radio/TV)",
+      "Penulisan/Penerbitan",
+      "Media Digital",
+    ],
   },
+
+  // 6. Arts & Entertainment
   {
     id: 36,
-    text: "Bekerja di lapangan (misalnya: proyek sosial, alam).",
+    text: "Seberapa besar hasrat Anda untuk terlibat dalam dunia seni dan hiburan?",
     category: "heart",
-    subcategory: "activities",
+    subcategory: "arts",
     type: "scale",
   },
   {
     id: 37,
-    text: "Aktivitas apa yang bisa Anda lakukan berjam-jam tanpa merasa lelah?",
+    text: "Seberapa penting bagi Anda untuk mempengaruhi budaya melalui seni dan hiburan?",
     category: "heart",
-    subcategory: "activities",
+    subcategory: "arts",
+    type: "scale",
+  },
+  {
+    id: 38,
+    text: "Pilih area seni dan hiburan yang paling menarik bagi Anda:",
+    category: "heart",
+    subcategory: "arts",
     type: "multiple",
     options: [
-      "Menulis/Meneliti",
-      "Membangun komunitas",
-      "Merancang solusi teknis",
-      "Berdoa/Merenungkan firman",
+      "Musik",
+      "Seni Visual",
+      "Teater/Drama",
+      "Tari",
+      "Film/Animasi",
+      "Desain/Fotografi",
     ],
   },
 
-  // 5. Refleksi Terbuka
-  {
-    id: 38,
-    text: "Jika Anda punya waktu dan sumber daya tak terbatas, apa yang akan Anda lakukan untuk mengubah dunia?",
-    category: "heart",
-    subcategory: "reflection",
-    type: "open",
-  },
+  // 7. Business/Economy
   {
     id: 39,
-    text: 'Ceritakan satu momen dalam hidup ketika Anda merasa "Inilah yang Tuhan ingin saya lakukan!"',
+    text: "Seberapa besar hasrat Anda untuk terlibat dalam dunia bisnis dan ekonomi?",
     category: "heart",
-    subcategory: "reflection",
-    type: "open",
+    subcategory: "business",
+    type: "scale",
   },
   {
     id: 40,
-    text: "Apa mimpi terbesar Anda yang belum tercapai?",
+    text: "Seberapa penting bagi Anda untuk mempengaruhi dunia bisnis atau ekonomi?",
+    category: "heart",
+    subcategory: "business",
+    type: "scale",
+  },
+  {
+    id: 41,
+    text: "Pilih area bisnis dan ekonomi yang paling menarik bagi Anda:",
+    category: "heart",
+    subcategory: "business",
+    type: "multiple",
+    options: [
+      "Kewirausahaan",
+      "Keuangan/Investasi",
+      "Manajemen/Kepemimpinan",
+      "Pemasaran/Penjualan",
+      "Teknologi/Inovasi",
+      "Bisnis Sosial/Berkelanjutan",
+    ],
+  },
+
+  // Pertanyaan Refleksi Terbuka
+  {
+    id: 42,
+    text: "Dari 7 bidang di atas (Agama, Keluarga, Pendidikan, Pemerintahan, Media, Seni, Bisnis), bidang mana yang paling Anda rasakan sebagai panggilan hidup Anda? Jelaskan mengapa.",
+    category: "heart",
+    subcategory: "reflection",
+    type: "open",
+  },
+  {
+    id: 43,
+    text: "Jika Anda memiliki sumber daya tak terbatas, perubahan apa yang ingin Anda buat dalam salah satu dari 7 bidang tersebut?",
     category: "heart",
     subcategory: "reflection",
     type: "open",
@@ -695,177 +741,350 @@ export const personalityAbilitiesQuestions: Question[] = [
   // 1. Extraversion (E) vs. Introversion (I)
   {
     id: 46,
-    text: "Saya merasa berenergi setelah menghabiskan waktu dengan banyak orang.",
+    text: "Saya cenderung mendapatkan energi dari:",
     category: "personality",
-    subcategory: "ekstrovert",
-    type: "scale",
+    subcategory: "ei",
+    type: "binary",
+    options: [
+      {
+        value: "e",
+        text: "Berinteraksi dengan banyak orang dan lingkungan yang ramai (Ekstrovert)",
+      },
+      {
+        value: "i",
+        text: "Menghabiskan waktu sendiri atau dengan beberapa teman dekat (Introvert)",
+      },
+    ],
   },
   {
     id: 47,
-    text: "Saya lebih suka diskusi kelompok daripada percakapan satu-satu.",
+    text: "Ketika menghadapi masalah, saya lebih suka:",
     category: "personality",
-    subcategory: "ekstrovert",
-    type: "scale",
+    subcategory: "ei",
+    type: "binary",
+    options: [
+      {
+        value: "e",
+        text: "Mendiskusikannya dengan orang lain untuk mendapatkan ide dan umpan balik",
+      },
+      {
+        value: "i",
+        text: "Memikirkannya sendiri terlebih dahulu sebelum berbagi dengan orang lain",
+      },
+    ],
   },
   {
     id: 48,
-    text: "Saya mudah memulai percakapan dengan orang asing.",
+    text: "Dalam situasi sosial, saya biasanya:",
     category: "personality",
-    subcategory: "ekstrovert",
-    type: "scale",
-  },
-  {
-    id: 49,
-    text: "Saya butuh waktu sendiri untuk 'mengisi ulang energi' setelah acara sosial.",
-    category: "personality",
-    subcategory: "introvert",
-    type: "scale",
-  },
-  {
-    id: 50,
-    text: "Saya lebih nyaman mengekspresikan ide secara lisan daripada tulisan.",
-    category: "personality",
-    subcategory: "ekstrovert",
-    type: "scale",
-  },
-  {
-    id: 51,
-    text: "Saya senang menjadi pusat perhatian dalam kelompok.",
-    category: "personality",
-    subcategory: "ekstrovert",
-    type: "scale",
+    subcategory: "ei",
+    type: "binary",
+    options: [
+      {
+        value: "e",
+        text: "Berbicara dengan banyak orang dan memulai percakapan dengan mudah",
+      },
+      {
+        value: "i",
+        text: "Berbicara dengan beberapa orang yang sudah saya kenal atau mengamati dari pinggir",
+      },
+    ],
   },
 
   // 2. Sensing (S) vs. Intuition (N)
   {
-    id: 52,
-    text: "Saya fokus pada fakta dan detail yang konkret.",
+    id: 49,
+    text: "Ketika belajar sesuatu yang baru, saya lebih suka:",
     category: "personality",
-    subcategory: "sensing",
-    type: "scale",
+    subcategory: "sn",
+    type: "binary",
+    options: [
+      {
+        value: "s",
+        text: "Informasi konkret dan contoh praktis yang dapat saya terapkan langsung",
+      },
+      {
+        value: "n",
+        text: "Konsep dan teori yang menjelaskan prinsip dasar dan kemungkinan pengembangannya",
+      },
+    ],
   },
   {
-    id: 53,
-    text: "Saya suka membayangkan kemungkinan masa depan.",
+    id: 50,
+    text: "Saat memecahkan masalah, saya lebih mengandalkan:",
     category: "personality",
-    subcategory: "intuition",
-    type: "scale",
+    subcategory: "sn",
+    type: "binary",
+    options: [
+      { value: "s", text: "Pengalaman dan fakta yang sudah terbukti" },
+      {
+        value: "n",
+        text: "Intuisi dan kemampuan melihat pola atau kemungkinan baru",
+      },
+    ],
   },
   {
-    id: 54,
-    text: "Saya lebih percaya pada pengalaman langsung daripada teori.",
+    id: 51,
+    text: "Saya lebih tertarik pada:",
     category: "personality",
-    subcategory: "sensing",
-    type: "scale",
-  },
-  {
-    id: 55,
-    text: "Saya tertarik pada pola dan makna di balik suatu peristiwa.",
-    category: "personality",
-    subcategory: "intuition",
-    type: "scale",
-  },
-  {
-    id: 56,
-    text: "Saya lebih suka instruksi jelas daripada ide abstrak.",
-    category: "personality",
-    subcategory: "sensing",
-    type: "scale",
-  },
-  {
-    id: 57,
-    text: "Saya sering memikirkan 'bagaimana jika...' atau 'mengapa hal ini terjadi?'.",
-    category: "personality",
-    subcategory: "intuition",
-    type: "scale",
+    subcategory: "sn",
+    type: "binary",
+    options: [
+      { value: "s", text: "Realitas saat ini dan detail praktis" },
+      { value: "n", text: "Kemungkinan masa depan dan gambaran besar" },
+    ],
   },
 
   // 3. Thinking (T) vs. Feeling (F)
   {
-    id: 58,
-    text: "Saya membuat keputusan berdasarkan logika, bukan perasaan.",
+    id: 52,
+    text: "Ketika membuat keputusan penting, saya lebih mengandalkan:",
     category: "personality",
-    subcategory: "thinking",
-    type: "scale",
+    subcategory: "tf",
+    type: "binary",
+    options: [
+      { value: "t", text: "Logika, analisis, dan pertimbangan objektif" },
+      {
+        value: "f",
+        text: "Nilai-nilai personal dan dampaknya terhadap orang lain",
+      },
+    ],
   },
   {
-    id: 59,
-    text: "Saya lebih memperhatikan kebutuhan orang lain daripada prinsip keadilan.",
+    id: 53,
+    text: "Dalam situasi konflik, saya cenderung:",
     category: "personality",
-    subcategory: "feeling",
-    type: "scale",
+    subcategory: "tf",
+    type: "binary",
+    options: [
+      {
+        value: "t",
+        text: "Fokus pada menemukan solusi yang paling logis dan adil",
+      },
+      {
+        value: "f",
+        text: "Mempertimbangkan perasaan semua pihak dan mencari harmoni",
+      },
+    ],
   },
   {
-    id: 60,
-    text: "Saya menghargai kebenaran yang keras daripada kenyamanan.",
+    id: 54,
+    text: "Saya lebih menghargai seseorang yang:",
     category: "personality",
-    subcategory: "thinking",
-    type: "scale",
-  },
-  {
-    id: 61,
-    text: "Saya mudah merasakan emosi orang lain.",
-    category: "personality",
-    subcategory: "feeling",
-    type: "scale",
-  },
-  {
-    id: 62,
-    text: "Konflik lebih baik diselesaikan dengan fakta, bukan kompromi.",
-    category: "personality",
-    subcategory: "thinking",
-    type: "scale",
-  },
-  {
-    id: 63,
-    text: "Saya sering dianggap terlalu 'lembut' atau 'kritis' oleh orang lain.",
-    category: "personality",
-    subcategory: "feeling",
-    type: "scale",
+    subcategory: "tf",
+    type: "binary",
+    options: [
+      { value: "t", text: "Jujur dan langsung, meskipun kadang menyakitkan" },
+      {
+        value: "f",
+        text: "Penuh perhatian dan suportif, meskipun kadang kurang tegas",
+      },
+    ],
   },
 
   // 4. Judging (J) vs. Perceiving (P)
   {
-    id: 64,
-    text: "Saya suka membuat rencana terperinci dan mengikutinya.",
+    id: 55,
+    text: "Dalam menjalani kehidupan sehari-hari, saya lebih suka:",
     category: "personality",
-    subcategory: "judging",
-    type: "scale",
+    subcategory: "jp",
+    type: "binary",
+    options: [
+      { value: "j", text: "Memiliki jadwal dan rencana yang terstruktur" },
+      { value: "p", text: "Bersikap fleksibel dan beradaptasi sesuai situasi" },
+    ],
+  },
+  {
+    id: 56,
+    text: "Saat mengerjakan proyek, saya cenderung:",
+    category: "personality",
+    subcategory: "jp",
+    type: "binary",
+    options: [
+      { value: "j", text: "Menyelesaikannya jauh sebelum tenggat waktu" },
+      { value: "p", text: "Bekerja dengan semangat menjelang tenggat waktu" },
+    ],
+  },
+  {
+    id: 57,
+    text: "Saya merasa lebih nyaman ketika:",
+    category: "personality",
+    subcategory: "jp",
+    type: "binary",
+    options: [
+      { value: "j", text: "Hal-hal sudah diputuskan dan terselesaikan" },
+      { value: "p", text: "Pilihan tetap terbuka dan belum final" },
+    ],
+  },
+
+  // Pertanyaan tambahan untuk E vs I
+  {
+    id: 58,
+    text: "Dalam situasi baru, saya biasanya:",
+    category: "personality",
+    subcategory: "ei",
+    type: "binary",
+    options: [
+      {
+        value: "e",
+        text: "Langsung berinteraksi dan mencari tahu dengan bertanya",
+      },
+      {
+        value: "i",
+        text: "Mengamati terlebih dahulu dan memproses informasi sendiri",
+      },
+    ],
+  },
+  {
+    id: 59,
+    text: "Saat akhir pekan, saya lebih memilih:",
+    category: "personality",
+    subcategory: "ei",
+    type: "binary",
+    options: [
+      { value: "e", text: "Menghadiri acara sosial atau bertemu banyak orang" },
+      {
+        value: "i",
+        text: "Menghabiskan waktu sendiri atau dengan beberapa teman dekat",
+      },
+    ],
+  },
+  {
+    id: 60,
+    text: "Saya mendapatkan ide terbaik saya ketika:",
+    category: "personality",
+    subcategory: "ei",
+    type: "binary",
+    options: [
+      { value: "e", text: "Berdiskusi dan bertukar pikiran dengan orang lain" },
+      { value: "i", text: "Merenung dan memikirkannya sendiri" },
+    ],
+  },
+
+  // Pertanyaan tambahan untuk S vs N
+  {
+    id: 61,
+    text: "Saat membaca, saya lebih tertarik pada:",
+    category: "personality",
+    subcategory: "sn",
+    type: "binary",
+    options: [
+      { value: "s", text: "Deskripsi detail dan fakta spesifik" },
+      { value: "n", text: "Tema, simbolisme, dan makna tersembunyi" },
+    ],
+  },
+  {
+    id: 62,
+    text: "Saat menceritakan pengalaman, saya cenderung:",
+    category: "personality",
+    subcategory: "sn",
+    type: "binary",
+    options: [
+      {
+        value: "s",
+        text: "Menjelaskan secara kronologis dengan detail spesifik",
+      },
+      {
+        value: "n",
+        text: "Fokus pada kesan umum dan hubungan dengan hal lain",
+      },
+    ],
+  },
+  {
+    id: 63,
+    text: "Saya lebih menghargai orang yang:",
+    category: "personality",
+    subcategory: "sn",
+    type: "binary",
+    options: [
+      { value: "s", text: "Praktis dan realistis dalam pendekatan mereka" },
+      { value: "n", text: "Inovatif dan visioner dalam pemikiran mereka" },
+    ],
+  },
+
+  // Pertanyaan tambahan untuk T vs F
+  {
+    id: 64,
+    text: "Saat memberikan umpan balik, saya cenderung:",
+    category: "personality",
+    subcategory: "tf",
+    type: "binary",
+    options: [
+      { value: "t", text: "Jujur dan langsung, fokus pada perbaikan" },
+      { value: "f", text: "Penuh perhatian dan suportif, menjaga perasaan" },
+    ],
   },
   {
     id: 65,
-    text: "Saya lebih fleksibel dan spontan dalam menjalani hari.",
+    text: "Dalam diskusi, saya lebih menghargai:",
     category: "personality",
-    subcategory: "perceiving",
-    type: "scale",
+    subcategory: "tf",
+    type: "binary",
+    options: [
+      { value: "t", text: "Argumen logis dan analisis objektif" },
+      { value: "f", text: "Harmoni dan mempertimbangkan nilai-nilai personal" },
+    ],
   },
   {
     id: 66,
-    text: "Saya merasa tidak nyaman jika jadwal berantakan.",
+    text: "Saat menghadapi ketidakadilan, reaksi pertama saya adalah:",
     category: "personality",
-    subcategory: "judging",
-    type: "scale",
+    subcategory: "tf",
+    type: "binary",
+    options: [
+      { value: "t", text: "Menganalisis situasi dan mencari solusi rasional" },
+      {
+        value: "f",
+        text: "Merasakan empati dan ingin membantu pihak yang dirugikan",
+      },
+    ],
   },
+
+  // Pertanyaan tambahan untuk J vs P
   {
     id: 67,
-    text: "Saya menunda keputusan hingga semua informasi terkumpul.",
+    text: "Dalam hal pengambilan keputusan, saya lebih suka:",
     category: "personality",
-    subcategory: "perceiving",
-    type: "scale",
+    subcategory: "jp",
+    type: "binary",
+    options: [
+      { value: "j", text: "Membuat keputusan cepat dan menyelesaikan masalah" },
+      {
+        value: "p",
+        text: "Menunda keputusan untuk menjelajahi lebih banyak opsi",
+      },
+    ],
   },
   {
     id: 68,
-    text: "Saya menyelesaikan tugas tepat waktu, bukan menunggu deadline.",
+    text: "Ruang kerja atau kamar saya biasanya:",
     category: "personality",
-    subcategory: "judging",
-    type: "scale",
+    subcategory: "jp",
+    type: "binary",
+    options: [
+      { value: "j", text: "Terorganisir dengan baik dengan sistem yang jelas" },
+      {
+        value: "p",
+        text: "Kreatif berantakan dengan barang-barang yang mudah diakses",
+      },
+    ],
   },
   {
     id: 69,
-    text: "Saya menikmati eksplorasi terbuka tanpa batasan struktur.",
+    text: "Saat merencanakan liburan, saya lebih suka:",
     category: "personality",
-    subcategory: "perceiving",
-    type: "scale",
+    subcategory: "jp",
+    type: "binary",
+    options: [
+      {
+        value: "j",
+        text: "Memiliki itinerary terperinci dan reservasi yang pasti",
+      },
+      {
+        value: "p",
+        text: "Memiliki ide umum dan membiarkan banyak hal terjadi secara spontan",
+      },
+    ],
   },
 
   // Pertanyaan Terbuka untuk Refleksi
@@ -1118,6 +1337,14 @@ export const questionnaireSections: QuestionnaireSection[] = [
   },
 ];
 
+// Gabungkan semua pertanyaan untuk digunakan di analyzer
+export const questionnaire_data: Question[] = [
+  ...spiritualGiftsQuestions,
+  ...heartQuestions,
+  ...personalityAbilitiesQuestions,
+  ...experiencesQuestions,
+];
+
 // Perbarui questionnaireCategories.spiritual.subcategories
 export const questionnaireCategories = {
   spiritual: {
@@ -1144,16 +1371,14 @@ export const questionnaireCategories = {
   heart: {
     title: "Heart Desire (Keinginan Hati)",
     subcategories: {
-      kepedulian: "Kepedulian",
-      passion: "Passion",
-      minat: "Minat",
-      antusiasme: "Antusiasme",
-      "anak-anak": "Anak-anak",
-      lansia: "Lansia",
-      kemiskinan: "Kemiskinan",
-      pemuridan: "Pemuridan",
-      misi: "Misi",
-      kesehatan: "Kesehatan",
+      religion: "Religion/Spirituality (Agama/Spiritualitas)",
+      family: "Family (Keluarga)",
+      education: "Education (Pendidikan)",
+      government: "Government (Pemerintahan)",
+      media: "Media (Media)",
+      arts: "Arts & Entertainment (Seni & Hiburan)",
+      business: "Business/Economy (Bisnis/Ekonomi)",
+      reflection: "Reflection (Refleksi)",
     },
   },
 

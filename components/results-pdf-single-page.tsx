@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import type { CategoryScore, ShapeRecommendations } from "@/lib/results-analyzer"
+import type { CategoryScore, ShapeRecommendations } from "@/lib/shape-analyzer-adapter"
 import jsPDF from "jspdf"
 import { useToast } from "@/components/ui/use-toast"
 import { Download, Mail, Share } from "lucide-react"

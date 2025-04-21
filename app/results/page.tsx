@@ -6,7 +6,7 @@ import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import { ShapeResultsTabs } from "@/components/shape-results-tabs"
 import { ResultsPDFEnhanced } from "@/components/results-pdf-enhanced"
-import { analyzeSpiritualGifts, analyzeHeartDesire, analyzePersonality, analyzeExperiences, generateShapeProfile } from "@/lib/results-analyzer"
+import { analyzeSpiritualGifts, analyzeHeartDesire, analyzePersonality, analyzeExperiences, generateShapeProfile } from "@/lib/shape-analyzer-adapter"
 
 export default async function ResultsPage() {
   const cookieStore = await cookies();

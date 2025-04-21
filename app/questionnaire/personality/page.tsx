@@ -10,6 +10,7 @@ import { QuestionnaireProgress } from "@/components/questionnaire-progress"
 import { QuestionnaireRating } from "@/components/questionnaire-rating"
 import { QuestionnaireEssay } from "@/components/questionnaire-essay"
 import { QuestionnaireMultiple } from "@/components/questionnaire-multiple"
+import { QuestionnaireBinary } from "@/components/questionnaire-binary"
 import { supabase } from "@/lib/supabase/client"
 import { useToast } from "@/components/ui/use-toast"
 
@@ -155,6 +156,15 @@ export default function PersonalityQuestionnairePage() {
                 />
               )}
 
+              {currentQuestion.type === "binary" && Array.isArray(currentQuestion.options) && (
+                <QuestionnaireBinary
+                  questionId={currentQuestion.id}
+                  options={currentQuestion.options as Array<{value: string; text: string}>}
+                  value={answers[currentQuestion.id] || ""}
+                  onChange={handleAnswerChange}
+                />
+              )}
+
               {currentQuestion.type === "open" && (
                 <QuestionnaireEssay
                   questionId={currentQuestion.id}
@@ -166,7 +176,7 @@ export default function PersonalityQuestionnairePage() {
               {currentQuestion.type === "multiple" && currentQuestion.options && (
                 <QuestionnaireMultiple
                   questionId={currentQuestion.id}
-                  options={currentQuestion.options}
+                  options={currentQuestion.options as string[]}
                   value={answers[currentQuestion.id] || ""}
                   onChange={handleAnswerChange}
                   multiSelect={currentQuestion.text.toLowerCase().includes("pilih") || currentQuestion.id === 76 || currentQuestion.id === 78 || currentQuestion.id === 79}
