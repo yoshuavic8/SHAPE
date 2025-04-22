@@ -85,9 +85,9 @@ export default function ExperiencesQuestionnairePage() {
         })
         .eq("user_id", session.user.id)
 
-      console.log("Auto-saved answers at", new Date().toLocaleTimeString())
+      // Auto-save completed
     } catch (error) {
-      console.error("Auto-save failed:", error)
+      // Auto-save failed
     }
   }
 
@@ -173,8 +173,7 @@ export default function ExperiencesQuestionnairePage() {
         <CardHeader>
           <CardTitle>Experiences (Pengalaman)</CardTitle>
           <CardDescription>
-            Jawablah setiap pernyataan dengan skala 1-5, di mana 1 adalah "Sangat Tidak Setuju" dan 5 adalah "Sangat
-            Setuju".
+            Jawablah setiap pertanyaan sesuai dengan jenisnya. Bagian ini berisi pertanyaan skala (1-5) dan pertanyaan terbuka di mana Anda dapat menuliskan pengalaman hidup Anda secara detail.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -46,8 +46,7 @@ export default async function QuestionnairePage() {
 
   // If not, create a new entry
   if (!existingQuestionnaire) {
-    console.log("No existing questionnaire found for user ID:", session.user.id)
-    console.log("Creating new questionnaire entry...")
+    // Membuat entri kuesioner baru
 
     const { data: newEntry, error: insertError } = await supabase
       .from("questionnaire_results")
@@ -62,17 +61,11 @@ export default async function QuestionnairePage() {
       .select()
 
     if (insertError) {
-      console.error("Error creating questionnaire entry:", insertError)
-    } else {
-      console.log("New questionnaire entry created:", newEntry)
+      // Error saat membuat entri kuesioner baru
     }
-  } else {
-    console.log("Existing questionnaire found for user ID:", session.user.id)
   }
 
-  if (fetchError && fetchError.code !== "PGRST116") { // PGRST116 is the error code for "no rows returned"
-    console.error("Error fetching questionnaire:", fetchError)
-  }
+  // PGRST116 is the error code for "no rows returned"
 
   return (
     <div className="space-y-6 py-8">
@@ -100,9 +93,13 @@ export default async function QuestionnairePage() {
           <div>
             <h3 className="font-medium">Cara Menjawab</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Untuk setiap pernyataan, nilai seberapa kuat Anda setuju atau tidak setuju pada skala 1-5, di mana 1
-              adalah "Sangat Tidak Setuju" dan 5 adalah "Sangat Setuju". Beberapa pertanyaan memerlukan jawaban tertulis
-              atau pilihan ganda.
+              Kuesioner ini berisi berbagai jenis pertanyaan:
+              <ul className="list-disc list-inside mt-2 space-y-1">
+                <li><span className="font-medium">Pertanyaan Skala:</span> Nilai seberapa kuat Anda setuju pada skala 1-5, di mana 1 adalah "Sangat Tidak Setuju" dan 5 adalah "Sangat Setuju".</li>
+                <li><span className="font-medium">Pertanyaan Pilihan Ganda:</span> Pilih satu atau beberapa opsi yang paling sesuai dengan Anda.</li>
+                <li><span className="font-medium">Pertanyaan Biner:</span> Pilih salah satu dari dua opsi yang disediakan (misalnya: Ya/Tidak, Introvert/Ekstrovert).</li>
+                <li><span className="font-medium">Pertanyaan Terbuka:</span> Berikan jawaban tertulis berdasarkan pengalaman pribadi Anda.</li>
+              </ul>
             </p>
           </div>
           <div>

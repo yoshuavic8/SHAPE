@@ -1,6 +1,15 @@
 // Fungsi untuk menganalisis hasrat hati
-import { CategoryScore } from '../types/shape-types';
-import { analyzeReflectiveAnswer } from './reflective-analyzer';
+import { CategoryScore } from "../types/shape-types";
+import { analyzeReflectiveAnswer } from "./reflective-analyzer";
+import {
+  analyzeReligiousServiceChoices,
+  analyzeFamilyServiceChoices,
+  analyzeEducationChoices,
+  analyzeGovernmentChoices,
+  analyzeMediaChoices,
+  analyzeArtsChoices,
+  analyzeBusinessChoices,
+} from "./heart-choices-analyzer";
 
 /**
  * Menganalisis jawaban kuesioner hasrat hati
@@ -40,7 +49,10 @@ export function analyzeHeartDesire(
   });
 
   // Check if data is in the new format (with raw_answers)
-  const answers = data && typeof data === "object" && data.raw_answers ? data.raw_answers : data;
+  const answers =
+    data && typeof data === "object" && data.raw_answers
+      ? data.raw_answers
+      : data;
 
   // Process each answer
   Object.entries(answers || {}).forEach(([questionId, value]) => {
@@ -143,11 +155,13 @@ export function analyzeHeartDesire(
     // Tambahkan wawasan terintegrasi ke results
     results.push({
       category: "Wawasan Terintegrasi",
-      description: `Berdasarkan refleksi Anda, bidang ${
-        combinedAnalysis.spheres.map((s) => heartCategories[s as keyof typeof heartCategories]).join(", ")
-      } tampaknya paling penting bagi Anda. Tema utama yang muncul adalah ${
-        combinedAnalysis.themes.join(", ")
-      }.`,
+      description: `Berdasarkan refleksi Anda, bidang ${combinedAnalysis.spheres
+        .map((s) => heartCategories[s as keyof typeof heartCategories])
+        .join(
+          ", "
+        )} tampaknya paling penting bagi Anda. Tema utama yang muncul adalah ${combinedAnalysis.themes.join(
+        ", "
+      )}.`,
       score: 5,
       percentage: 100,
       type: "reflection" as const,
@@ -165,10 +179,12 @@ export function analyzeHeartDesire(
     if (data && data.choices && data.choices.length > 0) {
       const questionIdNum = Number.parseInt(questionId);
       const question = heartQuestions.find((q) => q.id === questionIdNum);
-      
+
       if (question && question.subcategory) {
-        const subcategoryName = heartCategories[question.subcategory as keyof typeof heartCategories];
-        
+        const subcategoryName =
+          heartCategories[question.subcategory as keyof typeof heartCategories];
+
+        // Tambahkan hasil pilihan ke results
         results.push({
           category: `${subcategoryName}: ${data.choices.join(", ")}`,
           score: 4.5,
@@ -176,6 +192,93 @@ export function analyzeHeartDesire(
           type: "multiple" as const,
           subcategory: question.subcategory,
         });
+
+        // Tambahkan analisis berdasarkan pilihan
+        if (data.choices.length > 0) {
+          // Analisis berdasarkan ID pertanyaan
+          if (questionIdNum === 23) {
+            // Area pelayanan rohani
+            const religiousServiceAnalysis = analyzeReligiousServiceChoices(
+              data.choices
+            );
+            results.push({
+              category: `Analisis Pelayanan Rohani`,
+              description: religiousServiceAnalysis,
+              score: 4.8,
+              percentage: 96,
+              type: "insight" as const,
+              subcategory: question.subcategory,
+            });
+          } else if (questionIdNum === 26) {
+            // Area pelayanan keluarga
+            const familyServiceAnalysis = analyzeFamilyServiceChoices(
+              data.choices
+            );
+            results.push({
+              category: `Analisis Pelayanan Keluarga`,
+              description: familyServiceAnalysis,
+              score: 4.8,
+              percentage: 96,
+              type: "insight" as const,
+              subcategory: question.subcategory,
+            });
+          } else if (questionIdNum === 29) {
+            // Area pendidikan
+            const educationAnalysis = analyzeEducationChoices(data.choices);
+            results.push({
+              category: `Analisis Pendidikan`,
+              description: educationAnalysis,
+              score: 4.8,
+              percentage: 96,
+              type: "insight" as const,
+              subcategory: question.subcategory,
+            });
+          } else if (questionIdNum === 32) {
+            // Area pemerintahan
+            const governmentAnalysis = analyzeGovernmentChoices(data.choices);
+            results.push({
+              category: `Analisis Pemerintahan`,
+              description: governmentAnalysis,
+              score: 4.8,
+              percentage: 96,
+              type: "insight" as const,
+              subcategory: question.subcategory,
+            });
+          } else if (questionIdNum === 35) {
+            // Area media
+            const mediaAnalysis = analyzeMediaChoices(data.choices);
+            results.push({
+              category: `Analisis Media`,
+              description: mediaAnalysis,
+              score: 4.8,
+              percentage: 96,
+              type: "insight" as const,
+              subcategory: question.subcategory,
+            });
+          } else if (questionIdNum === 38) {
+            // Area seni dan hiburan
+            const artsAnalysis = analyzeArtsChoices(data.choices);
+            results.push({
+              category: `Analisis Seni dan Hiburan`,
+              description: artsAnalysis,
+              score: 4.8,
+              percentage: 96,
+              type: "insight" as const,
+              subcategory: question.subcategory,
+            });
+          } else if (questionIdNum === 41) {
+            // Area bisnis dan ekonomi
+            const businessAnalysis = analyzeBusinessChoices(data.choices);
+            results.push({
+              category: `Analisis Bisnis dan Ekonomi`,
+              description: businessAnalysis,
+              score: 4.8,
+              percentage: 96,
+              type: "insight" as const,
+              subcategory: question.subcategory,
+            });
+          }
+        }
       }
     }
   });

@@ -85,9 +85,9 @@ export default function HeartQuestionnairePage() {
         })
         .eq("user_id", session.user.id)
 
-      console.log("Auto-saved answers at", new Date().toLocaleTimeString())
+      // Auto-save completed
     } catch (error) {
-      console.error("Auto-save failed:", error)
+      // Auto-save failed
     }
   }
 
@@ -172,7 +172,7 @@ export default function HeartQuestionnairePage() {
         <CardHeader>
           <CardTitle>Heart Desire (Keinginan Hati)</CardTitle>
           <CardDescription>
-            Jawablah setiap pernyataan sesuai dengan jenis pertanyaan. Untuk pertanyaan skala, 1 adalah "Sangat Tidak Setuju" dan 5 adalah "Sangat Setuju". Untuk pertanyaan pilihan ganda, pilih opsi yang paling sesuai.
+            Jawablah setiap pertanyaan sesuai dengan jenisnya. Bagian ini berisi pertanyaan skala (1-5) dan pertanyaan pilihan ganda di mana Anda dapat memilih beberapa opsi yang sesuai dengan hasrat hati Anda.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

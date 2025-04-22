@@ -138,8 +138,7 @@ export default function PersonalityQuestionnairePage() {
         <CardHeader>
           <CardTitle>Personality (Kepribadian)</CardTitle>
           <CardDescription>
-            Jawablah setiap pernyataan dengan skala 1-5, di mana 1 adalah "Sangat Tidak Setuju" dan 5 adalah "Sangat
-            Setuju".
+            Jawablah setiap pertanyaan sesuai dengan jenisnya. Bagian ini berisi pertanyaan biner (pilih salah satu dari dua opsi) untuk menentukan tipe kepribadian Anda, serta pertanyaan skala untuk mengukur kemampuan Anda.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

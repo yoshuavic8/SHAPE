@@ -5,8 +5,9 @@ import Link from "next/link"
 import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import { ShapeResultsTabs } from "@/components/shape-results-tabs"
-import { ResultsPDFEnhanced } from "@/components/results-pdf-enhanced"
+import { PDFExportButton } from "@/components/pdf-export-button"
 import { analyzeSpiritualGifts, analyzeHeartDesire, analyzePersonality, analyzeExperiences, generateShapeProfile } from "@/lib/shape-analyzer-adapter"
+import { generateShapeRecommendations } from "@/lib/analyzers/integrated-analyzer"
 
 export default async function ResultsPage() {
   const cookieStore = await cookies();
@@ -163,72 +164,8 @@ export default async function ResultsPage() {
   // Get SHAPE code
   const shapeCode = shapeProfile.shapeCode
 
-  // Generate recommendations
-  const recommendations = {
-    purposeStatement: `Berdasarkan profil SHAPE-E Anda, Anda dirancang secara unik untuk melayani dengan ${shapeProfile.spiritualGifts[0]?.category || "karunia"} Anda, didorong oleh hasrat untuk ${shapeProfile.heartDesire[0]?.category || "melayani"}, dengan kepribadian ${shapeProfile.personality.type || "yang unik"} dan pengalaman hidup yang berharga.`,
-    ministryAreas: [
-      "Pelayanan Pemuridan",
-      "Pelayanan Pengajaran",
-      "Pelayanan Konseling",
-      "Pelayanan Misi",
-      "Pelayanan Musik",
-    ],
-    learningPathways: [
-      "Kursus Kepemimpinan",
-      "Pelatihan Konseling",
-      "Studi Alkitab Mendalam",
-      "Pengembangan Keterampilan Komunikasi",
-    ],
-    bibleVerse: "Sebab kita ini buatan Allah, diciptakan dalam Kristus Yesus untuk melakukan pekerjaan baik, yang dipersiapkan Allah sebelumnya. Ia mau, supaya kita hidup di dalamnya. - Efesus 2:10",
-    personalizedAdvice: [
-      `Dengan kombinasi karunia ${shapeProfile.spiritualGifts[0]?.category || "spiritual"} dan hasrat untuk ${shapeProfile.heartDesire[0]?.category || "melayani"}, Anda memiliki potensi besar untuk membuat dampak dalam pelayanan.`,
-      `Teruslah mengembangkan keterampilan Anda dan carilah kesempatan untuk menggunakan karunia Anda dalam pelayanan.`,
-      `Pertimbangkan untuk bergabung dengan pelayanan yang sesuai dengan profil SHAPE-E Anda untuk memaksimalkan dampak Anda.`
-    ],
-    strengthsWeaknesses: {
-      strengths: [
-        `Karunia utama dalam ${shapeProfile.spiritualGifts[0]?.category || "pelayanan"} yang dapat digunakan untuk membangun tubuh Kristus`,
-        `Hasrat yang kuat untuk ${shapeProfile.heartDesire[0]?.category || "melayani"}`,
-        `Kepribadian ${shapeProfile.personality.type || "yang unik"} yang membawa perspektif berharga`,
-        `Kemampuan dalam ${shapeProfile.abilities[0]?.category || "melayani"} yang dapat digunakan untuk melayani`,
-        `Pengalaman berharga dalam ${shapeProfile.experiences[0]?.category || "kehidupan"} yang membentuk Anda`,
-      ],
-      weaknesses: [
-        "Mungkin perlu mengembangkan keterampilan komunikasi",
-        "Perlu keseimbangan antara melayani dan istirahat",
-        "Bisa terlalu fokus pada satu area pelayanan",
-      ],
-    },
-    // Tambahkan properti yang diperlukan untuk ShapeRecommendations
-    ministryRecommendations: [
-      `Pelayanan yang memanfaatkan karunia ${shapeProfile.spiritualGifts[0]?.category || "spiritual"}`,
-      `Pelayanan yang sesuai dengan kepribadian ${shapeProfile.personality.type || "Anda"}`,
-      `Pelayanan yang memungkinkan Anda menggunakan kemampuan ${shapeProfile.abilities[0]?.category || "Anda"}`
-    ],
-    careerRecommendations: [
-      `Karir yang memanfaatkan karunia ${shapeProfile.spiritualGifts[0]?.category || "spiritual"}`,
-      `Karir yang sesuai dengan kepribadian ${shapeProfile.personality.type || "Anda"}`,
-      `Karir yang memungkinkan Anda menggunakan kemampuan ${shapeProfile.abilities[0]?.category || "Anda"}`
-    ],
-    developmentRecommendations: [
-      "Mengembangkan keterampilan komunikasi",
-      "Memperdalam pemahaman Alkitab",
-      "Mengasah kemampuan kepemimpinan"
-    ],
-    shapeSynergy: [
-      `Karunia ${shapeProfile.spiritualGifts[0]?.category || "spiritual"} Anda melengkapi hasrat ${shapeProfile.heartDesire[0]?.category || "hati"} Anda`,
-      `Kepribadian ${shapeProfile.personality.type || "Anda"} mendukung kemampuan ${shapeProfile.abilities[0]?.category || "Anda"}`,
-      `Pengalaman hidup Anda telah mempersiapkan Anda untuk pelayanan yang efektif`
-    ],
-    communityRoles: [
-      "Mentor",
-      "Pemimpin Kelompok Kecil",
-      "Pengajar",
-      "Konselor",
-      "Pelayan Masyarakat"
-    ],
-    shapeProfile: shapeProfile
-  }
+  // Generate recommendations using the integrated analyzer
+  const recommendations = generateShapeRecommendations(shapeProfile)
 
   // Format completion date
   const completedDate = new Date(results.updated_at).toLocaleDateString("id-ID", {
@@ -253,7 +190,7 @@ export default async function ResultsPage() {
               Back to Dashboard
             </a>
           </Button>
-          <ResultsPDFEnhanced
+          <PDFExportButton
             userName={userName}
             spiritualGifts={spiritualGifts}
             heartDesire={heartDesire}
@@ -284,15 +221,13 @@ export default async function ResultsPage() {
         </CardContent>
       </Card>
 
-      <div id="results-container">
-        <ShapeResultsTabs
-          spiritualGifts={spiritualGifts}
-          heartDesire={heartDesire}
-          personality={personality}
-          experiences={experiences}
-          recommendations={recommendations}
-        />
-      </div>
+      <ShapeResultsTabs
+        spiritualGifts={spiritualGifts}
+        heartDesire={heartDesire}
+        personality={personality}
+        experiences={experiences}
+        recommendations={recommendations}
+      />
     </div>
   )
 }

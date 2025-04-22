@@ -116,8 +116,7 @@ export default function SpiritualQuestionnairePage() {
         spiritualGiftsData.categories[subcategory] = parseFloat(avg.toFixed(2))
       })
 
-      // Log for debugging
-      console.log('Spiritual Gifts Data:', spiritualGiftsData)
+      // Prepare data for saving
 
       // Save to database
       const { error } = await supabase
@@ -162,7 +161,7 @@ export default function SpiritualQuestionnairePage() {
           <CardTitle>Spiritual Gifts (Karunia Rohani)</CardTitle>
           <CardDescription>
             Jawablah setiap pernyataan dengan skala 1-5, di mana 1 adalah "Sangat Tidak Setuju" dan 5 adalah "Sangat
-            Setuju".
+            Setuju". Pilih angka yang paling mencerminkan diri Anda.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

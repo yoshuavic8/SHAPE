@@ -1,5 +1,5 @@
 // Fungsi untuk menganalisis jawaban reflektif
-import { ReflectiveAnalysis, CategoryScore } from '../types/shape-types';
+import { ReflectiveAnalysis, CategoryScore } from "../types/shape-types";
 
 /**
  * Menganalisis jawaban reflektif untuk mendapatkan wawasan
@@ -14,7 +14,16 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
     themes: [],
   };
 
-  // Kata kunci untuk setiap sphere
+  // Tambahkan analisis panjang teks
+  if (answer.length < 100) {
+    result.length = "short";
+  } else if (answer.length < 300) {
+    result.length = "medium";
+  } else {
+    result.length = "long";
+  }
+
+  // Kata kunci untuk setiap sphere (diperluas)
   const sphereKeywords: Record<string, string[]> = {
     religion: [
       "gereja",
@@ -27,6 +36,16 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
       "ibadah",
       "spiritual",
       "agama",
+      "kristus",
+      "firman",
+      "berkat",
+      "kasih",
+      "penginjilan",
+      "keselamatan",
+      "pemuridan",
+      "komunitas iman",
+      "jemaat",
+      "pendeta",
     ],
     family: [
       "keluarga",
@@ -36,6 +55,16 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
       "rumah",
       "hubungan",
       "pasangan",
+      "ayah",
+      "ibu",
+      "saudara",
+      "kakek",
+      "nenek",
+      "cucu",
+      "keturunan",
+      "rumah tangga",
+      "kasih sayang",
+      "pengasuhan",
     ],
     education: [
       "pendidikan",
@@ -46,6 +75,16 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
       "kurikulum",
       "siswa",
       "murid",
+      "guru",
+      "dosen",
+      "universitas",
+      "kuliah",
+      "pelatihan",
+      "kursus",
+      "pembelajaran",
+      "mentor",
+      "bimbingan",
+      "penelitian",
     ],
     government: [
       "pemerintah",
@@ -55,6 +94,15 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
       "keadilan",
       "masyarakat",
       "negara",
+      "demokrasi",
+      "parlemen",
+      "legislatif",
+      "eksekutif",
+      "yudikatif",
+      "konstitusi",
+      "peraturan",
+      "undang-undang",
+      "reformasi",
     ],
     media: [
       "media",
@@ -65,6 +113,14 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
       "digital",
       "internet",
       "teknologi",
+      "jurnalisme",
+      "penyiaran",
+      "publikasi",
+      "platform",
+      "jaringan",
+      "podcast",
+      "video",
+      "blog",
     ],
     arts: [
       "seni",
@@ -75,6 +131,15 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
       "budaya",
       "hiburan",
       "artistik",
+      "karya",
+      "visual",
+      "fotografi",
+      "tari",
+      "sastra",
+      "puisi",
+      "novel",
+      "estetika",
+      "ekspresi",
     ],
     business: [
       "bisnis",
@@ -85,10 +150,38 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
       "perusahaan",
       "entrepreneur",
       "pasar",
+      "investasi",
+      "manajemen",
+      "strategi",
+      "inovasi",
+      "produk",
+      "layanan",
+      "pelanggan",
+      "pemasaran",
+      "penjualan",
+    ],
+    helping: [
+      "membantu",
+      "menolong",
+      "melayani",
+      "sukarela",
+      "donasi",
+      "amal",
+      "sosial",
+      "kemanusiaan",
+      "empati",
+      "peduli",
+      "berbagi",
+      "mendukung",
+      "bantuan",
+      "kontribusi",
+      "dampak",
+      "perubahan",
+      "komunitas",
     ],
   };
 
-  // Kata kunci untuk tema umum
+  // Kata kunci untuk tema umum (diperluas)
   const themeKeywords: Record<string, string[]> = {
     leadership: [
       "memimpin",
@@ -97,6 +190,17 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
       "visi",
       "pengaruh",
       "pemimpin",
+      "motivasi",
+      "inspirasi",
+      "strategi",
+      "keputusan",
+      "otoritas",
+      "delegasi",
+      "manajemen",
+      "koordinasi",
+      "pemberdayaan",
+      "mentor",
+      "teladan",
     ],
     service: [
       "melayani",
@@ -104,6 +208,15 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
       "mendukung",
       "berkontribusi",
       "pelayanan",
+      "pengabdian",
+      "dedikasi",
+      "altruisme",
+      "kerelawanan",
+      "bantuan",
+      "dukungan",
+      "kebaikan",
+      "empati",
+      "kepedulian",
     ],
     teaching: [
       "mengajar",
@@ -111,15 +224,112 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
       "membimbing",
       "menjelaskan",
       "pelatihan",
+      "instruksi",
+      "kurikulum",
+      "pelajaran",
+      "fasilitasi",
+      "pengembangan",
+      "pemahaman",
+      "keterampilan",
+      "kompetensi",
+      "edukasi",
+      "pembelajaran",
     ],
-    compassion: ["kasih", "empati", "peduli", "berbelas kasih", "perhatian"],
-    innovation: ["inovasi", "kreativitas", "perubahan", "solusi baru", "ide"],
-    justice: ["keadilan", "kesetaraan", "hak", "membela", "advokasi"],
-    community: ["komunitas", "masyarakat", "bersama", "kelompok", "tim"],
-    growth: ["pertumbuhan", "perkembangan", "kemajuan", "transformasi"],
+    compassion: [
+      "kasih",
+      "empati",
+      "peduli",
+      "berbelas kasih",
+      "perhatian",
+      "simpati",
+      "belas kasihan",
+      "pengertian",
+      "kebaikan",
+      "kelembutan",
+    ],
+    innovation: [
+      "inovasi",
+      "kreativitas",
+      "perubahan",
+      "solusi baru",
+      "ide",
+      "terobosan",
+      "penemuan",
+      "pembaruan",
+      "transformasi",
+      "disrupsi",
+    ],
+    justice: [
+      "keadilan",
+      "kesetaraan",
+      "hak",
+      "membela",
+      "advokasi",
+      "kebenaran",
+      "perlindungan",
+      "kesamaan",
+      "martabat",
+      "integritas",
+    ],
+    community: [
+      "komunitas",
+      "masyarakat",
+      "bersama",
+      "kelompok",
+      "tim",
+      "kolaborasi",
+      "kerjasama",
+      "persekutuan",
+      "persahabatan",
+      "jaringan",
+    ],
+    growth: [
+      "pertumbuhan",
+      "perkembangan",
+      "kemajuan",
+      "transformasi",
+      "peningkatan",
+      "ekspansi",
+      "evolusi",
+      "pengembangan",
+      "kemampuan",
+      "potensi",
+    ],
+    spiritual: [
+      "iman",
+      "rohani",
+      "spiritual",
+      "tuhan",
+      "doa",
+      "ibadah",
+      "meditasi",
+      "refleksi",
+      "keyakinan",
+      "kepercayaan",
+      "makna",
+      "tujuan",
+      "transenden",
+      "pencerahan",
+      "kebijaksanaan",
+    ],
+    resilience: [
+      "ketahanan",
+      "bertahan",
+      "mengatasi",
+      "tantangan",
+      "kesulitan",
+      "kegagalan",
+      "bangkit",
+      "ketekunan",
+      "kegigihan",
+      "adaptasi",
+      "fleksibilitas",
+      "kekuatan",
+      "keberanian",
+    ],
   };
 
-  // Kata kunci sentimen positif dan negatif
+  // Kata kunci sentimen positif dan negatif (diperluas)
   const positiveSentiment = [
     "senang",
     "sukacita",
@@ -129,7 +339,20 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
     "bersemangat",
     "antusias",
     "optimis",
+    "gembira",
+    "ceria",
+    "bangga",
+    "bersyukur",
+    "berterima kasih",
+    "luar biasa",
+    "menakjubkan",
+    "hebat",
+    "indah",
+    "menyenangkan",
+    "positif",
+    "sukses",
   ];
+
   const negativeSentiment = [
     "sedih",
     "kecewa",
@@ -139,26 +362,48 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
     "sulit",
     "masalah",
     "tantangan",
+    "kesulitan",
+    "hambatan",
+    "rintangan",
+    "kegagalan",
+    "kehilangan",
+    "menyesal",
+    "takut",
+    "cemas",
+    "khawatir",
+    "stres",
+    "tertekan",
+    "terbebani",
   ];
 
   // Konversi jawaban ke lowercase untuk memudahkan pencocokan
   const lowerAnswer = answer.toLowerCase();
 
-  // Identifikasi sphere berdasarkan kata kunci
+  // Identifikasi sphere berdasarkan kata kunci dengan pendekatan yang lebih canggih
   Object.entries(sphereKeywords).forEach(([sphere, keywords]) => {
-    if (keywords.some((keyword) => lowerAnswer.includes(keyword))) {
+    // Hitung berapa banyak kata kunci yang cocok
+    const matchCount = keywords.filter((keyword) =>
+      lowerAnswer.includes(keyword)
+    ).length;
+    // Jika ada lebih dari 1 kata kunci yang cocok, tambahkan sphere ini
+    if (matchCount >= 1) {
       result.spheres.push(sphere);
     }
   });
 
-  // Identifikasi tema berdasarkan kata kunci
+  // Identifikasi tema berdasarkan kata kunci dengan pendekatan yang lebih canggih
   Object.entries(themeKeywords).forEach(([theme, keywords]) => {
-    if (keywords.some((keyword) => lowerAnswer.includes(keyword))) {
+    // Hitung berapa banyak kata kunci yang cocok
+    const matchCount = keywords.filter((keyword) =>
+      lowerAnswer.includes(keyword)
+    ).length;
+    // Jika ada lebih dari 1 kata kunci yang cocok, tambahkan tema ini
+    if (matchCount >= 1) {
       result.themes.push(theme);
     }
   });
 
-  // Identifikasi sentimen
+  // Identifikasi sentimen dengan pendekatan yang lebih canggih
   const positiveCount = positiveSentiment.filter((word) =>
     lowerAnswer.includes(word)
   ).length;
@@ -166,13 +411,20 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
     lowerAnswer.includes(word)
   ).length;
 
-  if (positiveCount > negativeCount) {
-    result.sentiment = "positive";
-  } else if (negativeCount > positiveCount) {
-    result.sentiment = "negative";
+  // Tentukan sentimen berdasarkan perbandingan relatif
+  const totalSentimentWords = positiveCount + negativeCount;
+  if (totalSentimentWords > 0) {
+    const positiveRatio = positiveCount / totalSentimentWords;
+    if (positiveRatio > 0.6) {
+      result.sentiment = "positive";
+    } else if (positiveRatio < 0.4) {
+      result.sentiment = "negative";
+    } else {
+      result.sentiment = "neutral";
+    }
   }
 
-  // Ekstrak kata kunci penting (kata benda dan kata kerja)
+  // Ekstrak kata kunci penting (kata benda dan kata kerja) dengan pendekatan yang lebih canggih
   const words = lowerAnswer.split(/\s+/);
   const stopWords = [
     "adalah",
@@ -190,12 +442,42 @@ export function analyzeReflectiveAnswer(answer: string): ReflectiveAnalysis {
     "mereka",
     "kita",
     "kami",
+    "ada",
+    "juga",
+    "tidak",
+    "bukan",
+    "tapi",
+    "tetapi",
+    "namun",
+    "atau",
+    "jika",
+    "maka",
+    "karena",
+    "sebab",
+    "oleh",
+    "pada",
+    "kepada",
+    "tentang",
+    "seperti",
+    "sebagai",
   ];
+
+  // Filter kata-kata penting
   const importantWords = words.filter(
-    (word) => word.length > 4 && !stopWords.includes(word)
+    (word) => word.length > 3 && !stopWords.includes(word)
   );
 
-  result.keywords = [...new Set(importantWords)].slice(0, 10); // Ambil 10 kata unik
+  // Hitung frekuensi kata
+  const wordFrequency: Record<string, number> = {};
+  importantWords.forEach((word) => {
+    wordFrequency[word] = (wordFrequency[word] || 0) + 1;
+  });
+
+  // Urutkan kata berdasarkan frekuensi dan ambil 15 kata teratas
+  result.keywords = Object.entries(wordFrequency)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 15)
+    .map(([word]) => word);
 
   return result;
 }

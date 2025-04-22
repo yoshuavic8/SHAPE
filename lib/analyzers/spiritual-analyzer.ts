@@ -1,5 +1,5 @@
 // Fungsi untuk menganalisis karunia spiritual
-import { CategoryScore } from '../types/shape-types';
+import { CategoryScore } from "../types/shape-types";
 
 /**
  * Menganalisis jawaban kuesioner karunia spiritual
@@ -16,11 +16,9 @@ export function analyzeSpiritualGifts(
   const scores: Record<string, { total: number; count: number }> = {};
 
   // Initialize scores object for each spiritual gift category
-  Object.keys(spiritualGiftsCategories).forEach(
-    (subcategory) => {
-      scores[subcategory] = { total: 0, count: 0 };
-    }
-  );
+  Object.keys(spiritualGiftsCategories).forEach((subcategory) => {
+    scores[subcategory] = { total: 0, count: 0 };
+  });
 
   // Group questions by subcategory
   const questionsBySubcategory: Record<string, number[]> = {};
@@ -93,7 +91,10 @@ export function analyzeSpiritualGifts(
     .map(([subcategory, { total, count }]) => {
       const score = total / count;
       return {
-        category: spiritualGiftsCategories[subcategory as keyof typeof spiritualGiftsCategories],
+        category:
+          spiritualGiftsCategories[
+            subcategory as keyof typeof spiritualGiftsCategories
+          ],
         score: Number.parseFloat(score.toFixed(1)),
         percentage: Number.parseFloat(
           ((score / maxPossibleScore) * 100).toFixed(1)
