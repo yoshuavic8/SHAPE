@@ -190,6 +190,7 @@ export default async function ResultsPage() {
               Back to Dashboard
             </a>
           </Button>
+          {/* Tombol Export PDF dinonaktifkan sementara
           <PDFExportButton
             userName={userName}
             spiritualGifts={spiritualGifts}
@@ -199,7 +200,7 @@ export default async function ResultsPage() {
             shapeCode={shapeCode}
             recommendations={recommendations}
             completedDate={completedDate}
-          />
+          /> */}
         </div>
       </div>
 

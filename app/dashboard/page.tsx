@@ -4,6 +4,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
+import { ResultsButton } from "@/components/results-button"
 
 export default async function Dashboard() {
   const cookieStore = await cookies();
@@ -73,9 +74,7 @@ export default async function Dashboard() {
           </CardHeader>
           <CardContent>
             {isCompleted ? (
-              <Link href="/results">
-                <Button>View Your Results</Button>
-              </Link>
+              <ResultsButton />
             ) : (
               <Link href="/questionnaire">
                 <Button>Take Questionnaire</Button>
