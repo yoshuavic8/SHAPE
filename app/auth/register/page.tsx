@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/lib/hooks/use-auth"
 
 export default function RegisterPage() {
@@ -16,37 +16,108 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("")
   const [fullName, setFullName] = useState("")
   const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<{email?: string; password?: string; fullName?: string}>({})
   const { toast } = useToast()
   const { signUp } = useAuth()
 
+  const validateForm = () => {
+    const newErrors: {email?: string; password?: string; fullName?: string} = {}
+    let isValid = true
+
+    // Reset errors
+    setErrors({})
+
+    if (!fullName.trim()) {
+      newErrors.fullName = "Full name is required"
+      isValid = false
+    }
+
+    if (!email.trim()) {
+      newErrors.email = "Email is required"
+      isValid = false
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Please enter a valid email address"
+      isValid = false
+    }
+
+    if (!password) {
+      newErrors.password = "Password is required"
+      isValid = false
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters"
+      isValid = false
+    }
+
+    setErrors(newErrors)
+    return isValid
+  }
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Validate form before submission
+    if (!validateForm()) {
+      return
+    }
+
     setLoading(true)
 
-    try {
-      const { error } = await signUp(email, password, fullName)
+    // Hanya gunakan satu toast untuk loading
+    toast({
+      title: "Creating account...",
+      description: "Please wait while we set up your account.",
+      duration: 10000,
+    })
 
-      if (error) {
-        throw new Error(error)
+    try {
+      console.log("Attempting to sign up with:", { email, fullName })
+      const signUpResult = await signUp(email, password, fullName)
+      console.log("Sign up result:", signUpResult)
+
+      if (signUpResult.error) {
+        const error = signUpResult.error
+        console.error("Sign up error:", error)
+
+        // Handle error messages
+        if (error.includes("already registered")) {
+          setErrors({
+            email: "This email is already registered. Please use a different email or try to login."
+          })
+          throw new Error("This email is already registered")
+        } else if (error.includes("password")) {
+          setErrors({
+            password: error
+          })
+          throw new Error(error)
+        } else {
+          setErrors({
+            email: error,
+            password: error
+          })
+          throw new Error(error)
+        }
       }
 
-      // Jika tidak ada error, berarti pendaftaran berhasil
-      // useAuth hook akan mengarahkan ke halaman login dengan parameter registered=true
-      // Tampilkan pesan loading untuk memberi tahu user bahwa proses sedang berlangsung
+      // Jika berhasil, tampilkan toast sukses
       toast({
-        title: "Creating account...",
-        description: "Please wait while we set up your account.",
+        title: "Registration Successful!",
+        description: "Your account has been created. You will be redirected to the login page.",
+        variant: "default",
+        duration: 5000,
       })
 
-      // Tidak perlu set loading false di sini karena redirect akan terjadi
+      // Set loading to false
+      setLoading(false)
     } catch (error: any) {
-      // Tampilkan pesan error jika ada masalah
+      // Show error message
       toast({
-        title: "Error",
-        description: error.message || "Registration failed",
+        title: "Registration Failed",
+        description: error.message || "Registration failed. Please try again.",
         variant: "destructive",
+        duration: 5000,
       })
-      setLoading(false) // Hanya set loading false jika ada error
+
+      setLoading(false)
     }
   }
 
@@ -66,9 +137,19 @@ export default function RegisterPage() {
                 type="text"
                 placeholder="John Doe"
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={(e) => {
+                  setFullName(e.target.value)
+                  // Clear error when user types
+                  if (errors.fullName) {
+                    setErrors({...errors, fullName: undefined})
+                  }
+                }}
+                className={errors.fullName ? "border-red-500" : ""}
                 required
               />
+              {errors.fullName && (
+                <p className="text-sm text-red-500">{errors.fullName}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -77,9 +158,19 @@ export default function RegisterPage() {
                 type="email"
                 placeholder="name@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  // Clear error when user types
+                  if (errors.email) {
+                    setErrors({...errors, email: undefined})
+                  }
+                }}
+                className={errors.email ? "border-red-500" : ""}
                 required
               />
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
@@ -87,9 +178,20 @@ export default function RegisterPage() {
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                  // Clear error when user types
+                  if (errors.password) {
+                    setErrors({...errors, password: undefined})
+                  }
+                }}
+                className={errors.password ? "border-red-500" : ""}
                 required
               />
+              {errors.password && (
+                <p className="text-sm text-red-500">{errors.password}</p>
+              )}
+              <p className="text-xs text-gray-500">Password must be at least 6 characters</p>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">

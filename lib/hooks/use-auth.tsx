@@ -75,9 +75,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 return { error: error.message };
             }
 
-            // Redirect to specified path or dashboard after successful login
-            router.push(redirectTo);
-            router.refresh();
+            // Add a small delay before redirect to ensure toast messages are visible
+            setTimeout(() => {
+                // Redirect to specified path or dashboard after successful login
+                router.push(redirectTo);
+                router.refresh();
+            }, 1500); // 1.5 second delay
+
             return { error: null };
         } catch (error: any) {
             return {
@@ -92,7 +96,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         fullName: string
     ) => {
         try {
-            // Disable loading state if there's an error
             setIsLoading(true);
 
             const { error, data } = await supabase.auth.signUp({
@@ -111,48 +114,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
 
             if (data.user) {
-                // Create user profile
-                const { error: profileError } = await supabase
-                    .from("user_profiles")
-                    .insert({
-                        id: data.user.id,
-                        full_name: fullName,
-                        email,
-                    });
-
-                if (profileError) {
-                    setIsLoading(false);
-                    return { error: profileError.message };
-                }
-
-                // Create empty questionnaire results
-                console.log("Creating questionnaire entry for user:", data.user.id);
-
+                // Hapus kode pembuatan profil pengguna karena sudah ditangani oleh trigger database
+                
+                // Hanya buat questionnaire_results
                 const { data: questionnaireData, error: questionnaireError } = await supabase
                     .from("questionnaire_results")
-                    .insert({
+                    .upsert({
                         user_id: data.user.id,
                         spiritual_gifts: {},
                         heart_desire: {},
                         personality: {},
                         experiences: {},
                         is_completed: false,
-                    })
+                    }, { onConflict: 'user_id' })
                     .select();
 
                 if (questionnaireError) {
-                    console.error("Error creating questionnaire entry:", questionnaireError);
                     setIsLoading(false);
                     return { error: questionnaireError.message };
                 }
-
-                console.log("Questionnaire entry created successfully:", questionnaireData);
             }
 
-            // Redirect to login page instead of dashboard after signup
-            router.push("/auth/login?registered=true");
-            router.refresh();
+            // Set loading to false BEFORE redirect
             setIsLoading(false);
+
+            // Pastikan redirect berjalan dengan menambahkan kode berikut
+            const timestamp = new Date().getTime();
+            router.push(`/auth/login?registered=true&t=${timestamp}`);
+            router.refresh();
+
             return { error: null };
         } catch (error: any) {
             setIsLoading(false);
