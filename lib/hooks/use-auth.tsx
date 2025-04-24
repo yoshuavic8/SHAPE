@@ -92,6 +92,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         fullName: string
     ) => {
         try {
+            // Disable loading state if there's an error
+            setIsLoading(true);
+
             const { error, data } = await supabase.auth.signUp({
                 email,
                 password,
@@ -103,6 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             });
 
             if (error) {
+                setIsLoading(false);
                 return { error: error.message };
             }
 
@@ -117,6 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     });
 
                 if (profileError) {
+                    setIsLoading(false);
                     return { error: profileError.message };
                 }
 
@@ -137,6 +142,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                 if (questionnaireError) {
                     console.error("Error creating questionnaire entry:", questionnaireError);
+                    setIsLoading(false);
                     return { error: questionnaireError.message };
                 }
 
@@ -146,8 +152,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             // Redirect to login page instead of dashboard after signup
             router.push("/auth/login?registered=true");
             router.refresh();
+            setIsLoading(false);
             return { error: null };
         } catch (error: any) {
+            setIsLoading(false);
             return {
                 error: error.message || "An error occurred during sign up",
             };

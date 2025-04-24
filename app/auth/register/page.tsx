@@ -30,19 +30,23 @@ export default function RegisterPage() {
         throw new Error(error)
       }
 
+      // Jika tidak ada error, berarti pendaftaran berhasil
+      // useAuth hook akan mengarahkan ke halaman login dengan parameter registered=true
+      // Tampilkan pesan loading untuk memberi tahu user bahwa proses sedang berlangsung
       toast({
-        title: "Registration successful",
-        description: "Your account has been created. Redirecting to login page...",
-        duration: 5000,
+        title: "Creating account...",
+        description: "Please wait while we set up your account.",
       })
+
+      // Tidak perlu set loading false di sini karena redirect akan terjadi
     } catch (error: any) {
+      // Tampilkan pesan error jika ada masalah
       toast({
         title: "Error",
         description: error.message || "Registration failed",
         variant: "destructive",
       })
-    } finally {
-      setLoading(false)
+      setLoading(false) // Hanya set loading false jika ada error
     }
   }
 
