@@ -27,6 +27,27 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     }
   }, [user, isLoading])
 
+  // Tampilkan loading state jika masih loading
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <header className="sticky top-0 z-40 border-b bg-background">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between py-4">
+            <h1 className="text-xl font-bold">SHAPE Questionnaire</h1>
+            <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse"></div>
+          </div>
+        </header>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="h-8 w-32 bg-gray-200 animate-pulse mx-auto mb-4 rounded"></div>
+            <div className="h-4 w-48 bg-gray-200 animate-pulse mx-auto rounded"></div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Tampilkan layout normal jika sudah selesai loading
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background">

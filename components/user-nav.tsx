@@ -24,6 +24,10 @@ export function UserNav({ userName, userEmail }: UserNavProps) {
   const { toast } = useToast()
   const { signOut } = useAuth()
 
+  // Pastikan userName dan userEmail memiliki nilai default
+  const displayName = userName || "User"
+  const displayEmail = userEmail || ""
+
   const handleSignOut = async () => {
     try {
       await signOut()
@@ -45,15 +49,15 @@ export function UserNav({ userName, userEmail }: UserNavProps) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarFallback>{userName.charAt(0).toUpperCase()}</AvatarFallback>
+            <AvatarFallback>{displayName.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{userName}</p>
-            <p className="text-xs leading-none text-muted-foreground">{userEmail}</p>
+            <p className="text-sm font-medium leading-none">{displayName}</p>
+            <p className="text-xs leading-none text-muted-foreground">{displayEmail}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
